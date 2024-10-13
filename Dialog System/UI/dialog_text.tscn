@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bn8r5juee38nw"]
+
+[node name="DialogText" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 23.0
+text = "TEXT"
+fit_content = true
+scroll_active = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="ColorRect" type="ColorRect" parent="RichTextLabel"]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 300.0
+color = Color(0.45098, 0.45098, 0.45098, 0.290196)

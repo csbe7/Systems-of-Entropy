@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://8q0f7ahaivuj"]
+
+[ext_resource type="Script" path="res://Dialog System/Dialog Nodes/DialogTextNode.cs" id="1_ohlak"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c176o"]
+content_margin_bottom = 0.0
+bg_color = Color(0.843137, 0.498039, 0.329412, 0.796078)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qsi6e"]
+bg_color = Color(0.701549, 0.385545, 0.227372, 0.796078)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lw727"]
+content_margin_left = 3.0
+bg_color = Color(0.923362, 0.445081, 0.0439313, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2h5dl"]
+content_margin_left = 3.0
+bg_color = Color(0.777991, 0.368242, 0.0147979, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[node name="Dialog Text Node" type="GraphNode"]
+custom_minimum_size = Vector2(300, 140)
+offset_top = 1.0
+offset_right = 300.0
+offset_bottom = 167.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_c176o")
+theme_override_styles/panel_selected = SubResource("StyleBoxFlat_qsi6e")
+theme_override_styles/titlebar = SubResource("StyleBoxFlat_lw727")
+theme_override_styles/titlebar_selected = SubResource("StyleBoxFlat_2h5dl")
+title = "Text"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_ohlak")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+wrap_mode = 1

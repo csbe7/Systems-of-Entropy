@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://cy3hdgfgpf8kq"]
+
+[ext_resource type="Script" path="res://Scripts/Utility/SizeTool.cs" id="1_tpa0x"]
+[ext_resource type="Texture2D" uid="uid://dq3qdtmrvrtvh" path="res://Textures/Terrain/Grass.jpg" id="2_44df7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0wvpm"]
+resource_local_to_scene = true
+size = Vector3(1, 0.01, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fektt"]
+resource_local_to_scene = true
+albedo_texture = ExtResource("2_44df7")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5j3f7"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_fektt")
+size = Vector2(1, 1)
+
+[node name="Floor" type="StaticBody3D" groups=["Floor"]]
+collision_layer = 17
+script = ExtResource("1_tpa0x")
+size = Vector2(1, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_0wvpm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_5j3f7")
+skeleton = NodePath("")

@@ -1,0 +1,88 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=12 format=3 uid="uid://dl6ykc7s570w2"]
+
+[ext_resource type="ArrayMesh" uid="uid://bje8b15nmali1" path="res://Models/Weapons/Meshes/remmignton.tres" id="1_d334v"]
+[ext_resource type="Resource" uid="uid://dw5gmmykinq12" path="res://Weapon System/Weapon Animations/rifle_animations.tres" id="1_g7gcr"]
+[ext_resource type="Script" path="res://Scripts/RPG System/Stat/StatModifier.cs" id="2_bhdsd"]
+[ext_resource type="Script" path="res://Scripts/RPG System/AttackInfo.cs" id="2_pp2yi"]
+[ext_resource type="Script" path="res://Inventory System/Item Types/Weapon.cs" id="3_g3dni"]
+[ext_resource type="PackedScene" uid="uid://5bsloyfedek8" path="res://Prefabs/Projectiles/bullet_projectile.tscn" id="4_yp6js"]
+
+[sub_resource type="Resource" id="Resource_ogmuj"]
+script = ExtResource("2_pp2yi")
+damage = 10.0
+knockback = 0.0
+hitstunDuration = 0.1
+attackType = 1
+damageType = 0
+
+[sub_resource type="Resource" id="Resource_wlujc"]
+script = ExtResource("2_bhdsd")
+value = -100.0
+mode = 2
+order = 1000
+
+[sub_resource type="Curve" id="Curve_cm3nq"]
+_data = [Vector2(0, 0), 0.0, 2.57414, 0, 1, Vector2(0.384211, 0.989011), 2.57414, -1.60609, 1, 1, Vector2(1, 0), -1.60609, 0.0, 1, 0]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_854wf"]
+script = ExtResource("2_bhdsd")
+value = -30.0
+mode = 1
+order = 0
+
+[sub_resource type="Resource" id="Resource_eu84i"]
+script = ExtResource("2_bhdsd")
+value = -30.0
+mode = 1
+order = 0
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("3_g3dni")
+weaponType = 1
+attackInfo = SubResource("Resource_ogmuj")
+attackSpeedMod = SubResource("Resource_wlujc")
+strafeSpeedMod = SubResource("Resource_eu84i")
+hold = false
+useCharge = true
+chargeItemName = "9mm ammo"
+maxCharge = 6
+chargePerAttack = 1
+reloadTime = 1.5
+reloadSpeedMod = SubResource("Resource_854wf")
+drawTime = 0.5
+projectile = ExtResource("4_yp6js")
+range = 20.0
+projectileSpeed = 12.0
+hitboxDisplacement = Vector3(0, 0, 0)
+mesh = ExtResource("1_d334v")
+animations = ExtResource("1_g7gcr")
+rotation = Vector3(-0.328112, 1.42423, -1.62778)
+position = Vector3(0.00882423, 0.0935346, 0.0155221)
+tipPosition = Vector3(-0.319864, -0.02989, 0.0420603)
+holsteredRotation = Vector3(-0.129101, 2.99481, 0.943517)
+holsteredPosition = Vector3(-0.100161, 0.226236, -0.152801)
+triggerPosition = Vector3(0, 0, 0)
+triggerRotation = Vector3(0, 0, 0)
+scale = Vector3(1.6, 1.5, 1.5)
+leftArm_target_rotation = Vector3(0.186251, -0.351917, 0.623968)
+leftArm_target_position = Vector3(-0.104312, -0.0455531, 0.00342834)
+useleftArmIK = true
+kickback = 0.1
+kickup = 30.0
+recoilSpeed = 3.0
+recoilCurve = SubResource("Curve_cm3nq")
+attackCombo = 1
+attackCooldown = 1.5
+idealDistanceMAX = 8.0
+idealDistanceMIN = 7.0
+name = "Remmington"
+description = ""
+type = 3
+value = 0
+droppable = true
+usable = true
+equippable = true
+maxStack = 1
+weight = 5.0

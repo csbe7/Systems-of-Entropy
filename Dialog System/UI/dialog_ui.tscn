@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dae2jnnxc3ruk"]
+
+[node name="Dialog UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 807.0
+offset_top = 70.0
+offset_right = 1115.0
+offset_bottom = 570.0
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 0
+offset_left = 807.0
+offset_top = 69.0
+offset_right = 847.0
+offset_bottom = 109.0
+color = Color(0.442911, 0.442911, 0.442911, 0.2)

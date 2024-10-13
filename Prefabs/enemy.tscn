@@ -1,0 +1,192 @@
+[gd_scene load_steps=37 format=3 uid="uid://di8a7m2ap1fxh"]
+
+[ext_resource type="Script" path="res://NPC/CharacterSheet.cs" id="1_p5mae"]
+[ext_resource type="Script" path="res://Player/CharacterController.cs" id="1_s01ap"]
+[ext_resource type="Script" path="res://NPC/NPC_UImanager.cs" id="2_sj016"]
+[ext_resource type="PackedScene" uid="uid://bxg62b71k5pvh" path="res://NPC/npc_ui_bars.tscn" id="3_21dsn"]
+[ext_resource type="Resource" uid="uid://bv40xnrbhcyhj" path="res://Scripts/RPG System/Status Effects/sprint_modifier.tres" id="3_h0xxd"]
+[ext_resource type="Script" path="res://Scripts/AnimationController.cs" id="3_moprm"]
+[ext_resource type="Resource" uid="uid://dhebice7btoit" path="res://Scripts/RPG System/Faction System/Factions/enemy_faction.tres" id="4_kxlqi"]
+[ext_resource type="Script" path="res://Scripts/RPG System/WeaponManager.cs" id="4_mdigy"]
+[ext_resource type="Resource" uid="uid://dfoic5sjcpjgm" path="res://Scripts/RPG System/Status Effects/crouch_modifier.tres" id="4_v24t2"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/Inventory.cs" id="5_5nd7o"]
+[ext_resource type="Resource" uid="uid://cionnbk2veef0" path="res://Scripts/RPG System/Status Effects/strafe_modifier.tres" id="5_agt0v"]
+[ext_resource type="Resource" uid="uid://c88oaxmpcqjia" path="res://Inventory System/Items/Ammo/9mm_bullet.tres" id="6_o5ins"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/SlotData.cs" id="7_yd8ud"]
+[ext_resource type="Resource" uid="uid://pt3fm0jtxe4b" path="res://NPC/Personalities/tempered.tres" id="8_ni232"]
+[ext_resource type="Resource" uid="uid://d0idws5tqdhh1" path="res://NPC/Move States/Chase.tres" id="8_oayj3"]
+[ext_resource type="Resource" uid="uid://dl6ykc7s570w2" path="res://Inventory System/Items/Weapons/Remmington.tres" id="8_qr3x1"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/InventoryData.cs" id="9_4vyg3"]
+[ext_resource type="Resource" uid="uid://cw36efgcxml2k" path="res://NPC/Move States/Strafe.tres" id="9_glt8h"]
+[ext_resource type="Script" path="res://NPC/NPC_AI.cs" id="10_jty3w"]
+[ext_resource type="Resource" uid="uid://bpemer0fwpbhm" path="res://NPC/Move States/Flee.tres" id="10_rqh6l"]
+[ext_resource type="Script" path="res://Scripts/Utility/Follow.cs" id="10_vo4de"]
+[ext_resource type="Script" path="res://Scripts/RPG System/Stat/StatModifier.cs" id="11_hlsbm"]
+[ext_resource type="Script" path="res://NPC/NPC_pathfinding.cs" id="11_vw6ab"]
+[ext_resource type="PackedScene" uid="uid://dlapkiauk1j8w" path="res://Prefabs/humanoid_mesh.tscn" id="15_bqvij"]
+[ext_resource type="Resource" uid="uid://dudxuu3d86v7x" path="res://Inventory System/Items/Weapons/Fists.tres" id="18_nsotc"]
+[ext_resource type="PackedScene" uid="uid://b1gbdcdmjmr82" path="res://Prefabs/Body Parts/xbot_joints.tscn" id="25_iwcdj"]
+[ext_resource type="PackedScene" uid="uid://b2lxrjg3kd4g6" path="res://Prefabs/Body Parts/xbot_surface.tscn" id="26_kg0co"]
+
+[sub_resource type="Resource" id="Resource_cyqws"]
+script = ExtResource("11_hlsbm")
+value = -50.0
+mode = 1
+order = 0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rydfa"]
+radius = 0.1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_r4nua"]
+radius = 0.25
+height = 1.8
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_k8k4q"]
+viewport_path = NodePath("UI")
+
+[sub_resource type="Resource" id="Resource_xda5w"]
+script = ExtResource("7_yd8ud")
+item = ExtResource("18_nsotc")
+amount = 1
+charge = 0
+
+[sub_resource type="Resource" id="Resource_tvnsl"]
+script = ExtResource("7_yd8ud")
+item = ExtResource("6_o5ins")
+amount = 999
+charge = 0
+
+[sub_resource type="Resource" id="Resource_ybvrd"]
+script = ExtResource("7_yd8ud")
+item = ExtResource("8_qr3x1")
+amount = 1
+charge = 6
+
+[sub_resource type="Resource" id="Resource_r1yci"]
+resource_local_to_scene = true
+script = ExtResource("9_4vyg3")
+items = [SubResource("Resource_tvnsl"), SubResource("Resource_ybvrd")]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6dbvg"]
+height = 5.0
+radius = 12.0
+
+[node name="Enemy" type="CharacterBody3D" groups=["NPC"]]
+unique_name_in_owner = true
+collision_layer = 6
+collision_mask = 27
+script = ExtResource("1_p5mae")
+name = "Enemy"
+faction = ExtResource("4_kxlqi")
+health = 50.0
+speed = 2.0
+sprintSpeedModifier = ExtResource("3_h0xxd")
+sneakSpeedModifier = ExtResource("4_v24t2")
+strafeSpeedModifier = ExtResource("5_agt0v")
+sprintStamPerSec = 10.0
+
+[node name="CharacterController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_s01ap")
+
+[node name="NPC AI" type="Node" parent="." node_paths=PackedStringArray("sheet", "cc", "inventory", "wm", "pf")]
+unique_name_in_owner = true
+script = ExtResource("10_jty3w")
+personality = ExtResource("8_ni232")
+sheet = NodePath("..")
+cc = NodePath("../CharacterController")
+inventory = NodePath("../Inventory")
+wm = NodePath("../WeaponManager")
+fight = 100.0
+hostile = true
+pf = NodePath("../NavigationAgent3D")
+chaseState = ExtResource("8_oayj3")
+strafeState = ExtResource("9_glt8h")
+fleeState = ExtResource("10_rqh6l")
+strafeSpeedMod = SubResource("Resource_cyqws")
+tickrate = 0.5
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." node_paths=PackedStringArray("cc")]
+unique_name_in_owner = true
+path_desired_distance = 5.0
+path_height_offset = 0.5
+height = 2.0
+debug_use_custom = true
+debug_path_custom_color = Color(0.831373, 0, 0, 1)
+script = ExtResource("11_vw6ab")
+cc = NodePath("../CharacterController")
+baseTargetDistance = 0.5
+followDistance = 2.0
+followWaitDistance = 1.0
+maxRays = 16
+rayOffset = Vector3(0, 0.5, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+collision_mask = 17
+debug_shape_custom_color = Color(1, 0, 0, 1)
+debug_shape_thickness = 3
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("SphereShape3D_rydfa")
+target_position = Vector3(0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.883492, 0)
+shape = SubResource("CapsuleShape3D_r4nua")
+
+[node name="UI Display" type="Sprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.208206, 2.2843, 0.00769377)
+billboard = 1
+texture = SubResource("ViewportTexture_k8k4q")
+
+[node name="UI Manager" type="Node" parent="." node_paths=PackedStringArray("sheet", "wm", "ai", "ui")]
+script = ExtResource("2_sj016")
+sheet = NodePath("..")
+wm = NodePath("../WeaponManager")
+ai = NodePath("../NPC AI")
+ui = NodePath("../UI/NPC_UI_bars")
+
+[node name="UI" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(100, 100)
+
+[node name="NPC_UI_bars" parent="UI" instance=ExtResource("3_21dsn")]
+
+[node name="AnimationController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_moprm")
+rotationSpeed = 15.0
+lerpSpeed = 10.0
+
+[node name="WeaponManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_mdigy")
+unarmed = SubResource("Resource_xda5w")
+
+[node name="Inventory" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_5nd7o")
+inv = SubResource("Resource_r1yci")
+
+[node name="Near Range" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Near Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94782, 0)
+shape = SubResource("CylinderShape3D_6dbvg")
+
+[node name="Break Transform Inheritance" type="Node" parent="."]
+
+[node name="Mesh" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("10_vo4de")
+
+[node name="HumanoidMesh" parent="Mesh" instance=ExtResource("15_bqvij")]
+Joints = ExtResource("25_iwcdj")
+Surface = ExtResource("26_kg0co")

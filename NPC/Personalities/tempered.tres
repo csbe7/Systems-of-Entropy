@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Personality" load_steps=2 format=3 uid="uid://pt3fm0jtxe4b"]
+
+[ext_resource type="Script" path="res://NPC/Personalities/Personality.cs" id="1_76ag7"]
+
+[resource]
+script = ExtResource("1_76ag7")
+healthDangerMax = 60.0
+staminaDangerMax = 10.0
+ammoDangerMax = 10.0
+exposureDanger = 10.0
+exposureDangerMax = 30.0
+hideTreshold = 50.0
+reloadTreshold = 50.0

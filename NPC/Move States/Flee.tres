@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCMoveState" load_steps=2 format=3 uid="uid://bpemer0fwpbhm"]
+
+[ext_resource type="Script" path="res://NPC/Move States/NPCMoveState.cs" id="1_om5xt"]
+
+[resource]
+script = ExtResource("1_om5xt")
+followWeight = 0.0
+strafeWeight = 0.25
+obstacleAvoidanceDistance = 3.0
+neighbourAvoidanceWeight = 3.0
+fleeWeight = 1.0
+lineOfSightDistance = 1.0
+lineOfSightWeight = 0.0

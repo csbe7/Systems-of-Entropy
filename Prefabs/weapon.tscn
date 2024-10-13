@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://i40jmwkpjd68"]
+
+[sub_resource type="Skin" id="Skin_l2y2s"]
+resource_name = "Skin"
+bind_count = 5
+bind/0/name = &"Grip"
+bind/0/bone = -1
+bind/0/pose = Transform3D(1.40098, 0.65996, -8.4987e-08, -0.719201, 1.28558, -3.94258e-07, -1.13824e-07, 3.89555e-07, 1.44509, 0.009654, 0.0344374, 1.04941e-08)
+bind/1/name = &"Trigger"
+bind/1/bone = -1
+bind/1/pose = Transform3D(-1.5748, -3.01462e-07, -5.96576e-06, 4.22404e-07, -1.44509, -1.57129e-06, -6.50127e-06, -1.57129e-06, 1.44509, -0.0782028, 0.0571107, -2.61612e-07)
+bind/2/name = &"Trigger_end"
+bind/2/bone = -1
+bind/2/pose = Transform3D(-1.5748, 6.50731e-12, -5.96576e-06, 9.38743e-08, -1.44509, -1.57129e-06, -6.50127e-06, -1.57129e-06, 1.44509, -0.0782028, 0.0261791, -2.61612e-07)
+bind/3/name = &"Pump"
+bind/3/bone = -1
+bind/3/pose = Transform3D(1.40799e-07, 1.44509, -3.85788e-06, -1.5748, 8.61336e-08, -1.92717e-07, -2.10016e-07, 3.85788e-06, 1.44509, -0.0622826, -0.367131, -2.15901e-07)
+bind/4/name = &"Pump_end"
+bind/4/bone = -1
+bind/4/pose = Transform3D(9.59627e-08, 1.44509, -3.85788e-06, -1.5748, 4.49906e-08, -1.92717e-07, -2.10016e-07, 3.85788e-06, 1.44509, -0.0622827, -0.611669, -2.15901e-07)
+
+[node name="Weapon" type="Node3D"]
+transform = Transform3D(0.495944, 0.24595, 1.40475, -1.51219, -0.0808782, 0.483382, 0.165335, -1.47749, 0.207381, 0.00882423, 0.0935346, 0.0155221)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.635, -6.0536e-08, 1.49012e-08, 0, 2.23517e-08, -0.692, -1.02445e-08, 0.692, 3.72529e-08, 0, 0, 0)
+skin = SubResource("Skin_l2y2s")
+skeleton = NodePath("")
+
+[node name="leftHand_target" type="Node3D" parent="."]
+transform = Transform3D(0.724534, -0.600255, -0.338737, 0.574154, 0.797531, -0.185176, 0.381305, -0.0603215, 0.922479, -0.104312, -0.0455531, 0.00342834)
+
+[node name="Tip" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, -2.23517e-08, -5.58794e-09, -1.49012e-08, 1, -1.49012e-08, 1.86265e-08, 5.96046e-08, 1, -0.319864, -0.02989, 0.0420603)
+
+[node name="Trigger" type="Node3D" parent="."]
+transform = Transform3D(1, -7.45058e-09, -8.19564e-08, -1.49012e-08, 1, 1.49012e-08, 2.32831e-08, 7.45058e-08, 1, -0.0375425, -0.00184493, 0.0167865)

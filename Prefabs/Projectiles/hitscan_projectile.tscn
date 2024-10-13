@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqkshuogho4l1"]
+
+[ext_resource type="Script" path="res://Scripts/Projectile/Projectile_hitscan.cs" id="1_wh7eu"]
+
+[node name="HitscanProjectile" type="Node3D"]
+script = ExtResource("1_wh7eu")

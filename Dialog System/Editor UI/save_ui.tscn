@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxqxuck23k2n3"]
+
+[ext_resource type="Script" path="res://Dialog System/Editor UI/SaveUi.cs" id="1_vckt2"]
+
+[node name="Save UI" type="Control" node_paths=PackedStringArray("textEdit")]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+script = ExtResource("1_vckt2")
+textEdit = NodePath("ColorRect/TextEdit")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -75.0
+offset_right = 115.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -113.0
+offset_top = -73.0
+offset_right = 113.0
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.14902, 0.14902, 0.203922, 1)
+
+[node name="TextEdit" type="TextEdit" parent="ColorRect"]
+custom_minimum_size = Vector2(170, 30)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.0
+offset_top = -36.0
+offset_right = 85.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+scroll_fit_content_height = true
+
+[node name="Save Button" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 90.0
+offset_right = 86.0
+offset_bottom = 126.0
+theme_override_font_sizes/font_size = 20
+text = "SAVE"
+
+[node name="Cancel Button" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 90.0
+offset_right = 195.0
+offset_bottom = 126.0
+theme_override_font_sizes/font_size = 20
+text = "CANCEL"
+
+[connection signal="button_down" from="ColorRect/Save Button" to="." method="OnSave"]
+[connection signal="button_down" from="ColorRect/Cancel Button" to="." method="OnCancel"]

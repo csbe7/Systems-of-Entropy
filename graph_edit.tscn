@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://bv003f4yla7r4"]
+
+[ext_resource type="Script" path="res://Dialog System/DialogEditor.cs" id="1_jiuud"]
+[ext_resource type="PackedScene" uid="uid://q88acle5uvar" path="res://Dialog System/Dialog Node Picker/node_picker.tscn" id="2_7evp7"]
+[ext_resource type="Texture2D" uid="uid://dmxau1kn6kw0a" path="res://Dialog System/Editor UI/Bin_icon.png" id="3_gyegp"]
+[ext_resource type="Script" path="res://Dialog System/Editor UI/SaveButton.cs" id="4_lur7j"]
+[ext_resource type="PackedScene" uid="uid://bxqxuck23k2n3" path="res://Dialog System/Editor UI/save_ui.tscn" id="5_cbh4k"]
+
+[node name="Dialogue Editor" type="GraphEdit"]
+offset_right = 1156.0
+offset_bottom = 648.0
+scroll_offset = Vector2(-1156, -200)
+snapping_enabled = false
+right_disconnects = true
+script = ExtResource("1_jiuud")
+TreeSavePath = "res://Dialog System/Dialog Trees"
+NodePicker = ExtResource("2_7evp7")
+
+[node name="Delete Button" type="Button" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 0
+offset_left = 310.0
+offset_top = 14.0
+offset_right = 340.0
+offset_bottom = 44.0
+icon = ExtResource("3_gyegp")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Save Button" type="Button" parent="."]
+custom_minimum_size = Vector2(70, 30)
+layout_mode = 0
+offset_left = 1050.0
+offset_top = 14.0
+offset_right = 1120.0
+offset_bottom = 45.0
+text = "SAVE"
+script = ExtResource("4_lur7j")
+SaveUI = ExtResource("5_cbh4k")
+
+[connection signal="connection_request" from="." to="." method="OnConnectionRequest"]
+[connection signal="disconnection_request" from="." to="." method="OnDisconnectionRequest"]
+[connection signal="node_deselected" from="." to="." method="OnNodeDeselected"]
+[connection signal="node_selected" from="." to="." method="OnNodeSelected"]
+[connection signal="button_down" from="Delete Button" to="." method="OnDeleteNode"]
+[connection signal="button_down" from="Save Button" to="Save Button" method="OnButtonDown"]

@@ -1,0 +1,77 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=10 format=3 uid="uid://dudxuu3d86v7x"]
+
+[ext_resource type="Script" path="res://Inventory System/Item Types/Weapon.cs" id="1_5yplt"]
+[ext_resource type="Resource" uid="uid://cjiw0gkhl4606" path="res://Weapon System/Weapon Animations/fist_animations.tres" id="1_im5si"]
+[ext_resource type="Script" path="res://Scripts/RPG System/AttackInfo.cs" id="1_mqrmx"]
+[ext_resource type="PackedScene" uid="uid://dd3tvcy1qk677" path="res://Prefabs/Hitbox/hitbox.tscn" id="2_vq0xo"]
+[ext_resource type="Script" path="res://Scripts/RPG System/Stat/StatModifier.cs" id="3_xafy3"]
+
+[sub_resource type="Resource" id="Resource_531ra"]
+script = ExtResource("1_mqrmx")
+damage = 20.0
+knockback = 2.0
+hitstunDuration = 0.2
+attackType = 0
+damageType = 0
+
+[sub_resource type="Resource" id="Resource_s0xsb"]
+script = ExtResource("3_xafy3")
+value = -100.0
+mode = 2
+order = 1000
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vkhrb"]
+radius = 1.0
+
+[sub_resource type="Resource" id="Resource_2e8re"]
+script = ExtResource("3_xafy3")
+value = -10.0
+mode = 1
+order = 0
+
+[resource]
+script = ExtResource("1_5yplt")
+weaponType = 0
+attackInfo = SubResource("Resource_531ra")
+attackSpeedMod = SubResource("Resource_s0xsb")
+strafeSpeedMod = SubResource("Resource_2e8re")
+hold = false
+useCharge = false
+chargeItemName = ""
+maxCharge = 0
+chargePerAttack = 1
+reloadTime = 0.0
+drawTime = 0.0
+range = 0.0
+projectileSpeed = 0.0
+hitbox = ExtResource("2_vq0xo")
+hitboxShape = SubResource("SphereShape3D_vkhrb")
+hitboxDisplacement = Vector3(0, 1, -1)
+animations = ExtResource("1_im5si")
+rotation = Vector3(0, 0, 0)
+position = Vector3(0, 0, 0)
+tipPosition = Vector3(0, 0, 0)
+holsteredRotation = Vector3(0, 0, 0)
+holsteredPosition = Vector3(0, 0, 0)
+triggerPosition = Vector3(0, 0, 0)
+triggerRotation = Vector3(0, 0, 0)
+scale = Vector3(0, 0, 0)
+leftArm_target_rotation = Vector3(0, 0, 0)
+leftArm_target_position = Vector3(0, 0, 0)
+useleftArmIK = false
+kickback = 0.0
+kickup = 0.0
+recoilSpeed = 0.0
+attackCombo = 0
+attackCooldown = 0.0
+idealDistanceMAX = 0.0
+idealDistanceMIN = 0.0
+name = "Fists"
+description = ""
+type = 3
+value = 0
+droppable = false
+usable = false
+equippable = false
+maxStack = 1
+weight = 0.0

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Faction" load_steps=2 format=3 uid="uid://bugw8nhlpa1wy"]
+
+[ext_resource type="Script" path="res://Scripts/RPG System/Faction System/Faction.cs" id="1_8kjue"]
+
+[resource]
+script = ExtResource("1_8kjue")
+name = "Player"
+baseRelationship = 0.0
+relationships = {
+"Enemy": -50.0
+}

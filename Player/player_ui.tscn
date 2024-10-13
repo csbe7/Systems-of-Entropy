@@ -1,0 +1,90 @@
+[gd_scene load_steps=7 format=3 uid="uid://cah0bx4hdhmd6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_so7m0"]
+bg_color = Color(0.188235, 0.188235, 0.188235, 0.203922)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_21h2p"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0xnj"]
+bg_color = Color(1, 1, 1, 0.372549)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qjiyt"]
+bg_color = Color(0.878431, 0.176471, 0.152941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oyybf"]
+bg_color = Color(0.305882, 0.305882, 0.305882, 0.298039)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vguoq"]
+bg_color = Color(0.313726, 0.831373, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[node name="PlayerUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Damage Bar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 573.0
+offset_right = 205.0
+offset_bottom = 590.0
+theme_override_styles/background = SubResource("StyleBoxFlat_so7m0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_21h2p")
+value = 100.0
+show_percentage = false
+
+[node name="Health Bar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 573.0
+offset_right = 204.0
+offset_bottom = 590.0
+theme_override_styles/background = SubResource("StyleBoxFlat_x0xnj")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qjiyt")
+value = 100.0
+show_percentage = false
+
+[node name="Stamina Bar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 595.0
+offset_right = 205.0
+offset_bottom = 612.0
+theme_override_styles/background = SubResource("StyleBoxFlat_oyybf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vguoq")
+value = 100.0
+show_percentage = false
+
+[node name="Ammo Counter" type="Label" parent="."]
+layout_mode = 0
+offset_left = 222.0
+offset_top = 572.0
+offset_right = 292.0
+offset_bottom = 595.0
+text = "AMMO:    6/6"

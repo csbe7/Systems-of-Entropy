@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://q88acle5uvar"]
+
+[ext_resource type="Texture2D" uid="uid://4eao6qvqh40u" path="res://Dialog System/Editor UI/NodePickerBG.png" id="1_28guw"]
+[ext_resource type="Script" path="res://Dialog System/Dialog Node Picker/DialogNodePicker.cs" id="1_wn442"]
+[ext_resource type="PackedScene" uid="uid://c80jju6of51ar" path="res://Dialog System/Dialog Node Picker/dialog_node_picker_button.tscn" id="2_c5phg"]
+[ext_resource type="PackedScene" uid="uid://bd4o287gtetsg" path="res://Dialog System/Dialog Nodes/start_node.tscn" id="2_tnm6n"]
+[ext_resource type="PackedScene" uid="uid://8q0f7ahaivuj" path="res://Dialog System/Dialog Nodes/dialog_text_node.tscn" id="3_g0eco"]
+[ext_resource type="PackedScene" uid="uid://dqw5erhjeuwva" path="res://Dialog System/Dialog Nodes/end_node.tscn" id="4_a4huj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0kagw"]
+bg_color = Color(0.6, 0.6, 0.6, 0.611765)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xwrxi"]
+bg_color = Color(1, 1, 1, 0)
+
+[node name="Dialog Node Picker" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wn442")
+dialogNodes = [ExtResource("2_tnm6n"), ExtResource("3_g0eco"), ExtResource("4_a4huj")]
+PickerButton = ExtResource("2_c5phg")
+
+[node name="Close Button" type="Button" parent="."]
+z_index = 1
+layout_mode = 2
+offset_left = 2.0
+offset_top = 149.0
+offset_right = 146.0
+offset_bottom = 182.0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/hover = SubResource("StyleBoxFlat_0kagw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_xwrxi")
+text = "CLOSE"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(144, 144)
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 146.0
+offset_bottom = 146.0
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(74, 92)
+texture = ExtResource("1_28guw")
+
+[connection signal="button_down" from="Close Button" to="." method="OnClose"]

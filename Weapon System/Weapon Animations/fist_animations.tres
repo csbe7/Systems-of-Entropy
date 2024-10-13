@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponAnimations" load_steps=2 format=3 uid="uid://cjiw0gkhl4606"]
+
+[ext_resource type="Script" path="res://Weapon System/Weapon Animations/WeaponAnimations.cs" id="1_17kj5"]
+
+[resource]
+script = ExtResource("1_17kj5")
+lib = "Fists"
+sprint = "base"
+draw = "fist_draw"
+attacks = ["punch1", "punch2", "punch3"]
+attackSpeeds = [2.0, 1.0, 1.0]
+standingIdle = "fist_standing_idle"
+walkForward = "fist_standing_forward"
+walkBackward = "fist_standing_backward"
+walkRight = "fist_standing_right"
+walkLeft = "fist_standing_left"
+walkForwardRight = "fist_standing_forward_right"
+walkForwardLeft = "fist_standing_forward_left"
+walkBackwardRight = "fist_standing_backward_right"
+walkBackwardLeft = "fist_standing_backward_left"
+crouchingIdle = "fist_crouching_idle"
+crouchForward = "fist_crouching_forward"
+crouchBackward = "fist_crouching_backward"
+crouchRight = "fist_crouching_right"
+crouchLeft = "fist_crouching_left"
+crouchForwardRight = "fist_crouching_forward_right"
+crouchForwardLeft = "fist_crouching_forward_left"
+crouchBackwardRight = "fist_crouching_backward_right"
+crouchBackwardLeft = "fist_crouching_backward_left"

@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://fdhuxr6mpru0"]
+
+[ext_resource type="Script" path="res://Inventory System/InventoryUI/QuantitySelector.cs" id="1_na6xx"]
+
+[node name="QuantitySelector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 290.0
+offset_top = 118.0
+offset_right = 290.0
+offset_bottom = 118.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_na6xx")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 135.0
+offset_bottom = 87.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = 132.0
+offset_bottom = 83.0
+color = Color(0.14902, 0.14902, 0.203922, 1)
+
+[node name="HSlider" type="HSlider" parent="."]
+z_index = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 121.0
+offset_bottom = 76.0
+
+[node name="LineEdit" type="LineEdit" parent="."]
+z_index = 1
+layout_mode = 0
+offset_left = 37.0
+offset_top = 23.0
+offset_right = 104.063
+offset_bottom = 54.0
+text = "1"
+alignment = 1
+max_length = 3
+
+[node name="ConfirmButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 87.0
+offset_right = 60.0
+offset_bottom = 107.0
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 74.0
+offset_top = 87.0
+offset_right = 134.0
+offset_bottom = 118.0
+text = "Cancel"

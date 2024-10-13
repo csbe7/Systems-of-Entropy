@@ -1,0 +1,303 @@
+[gd_scene load_steps=9 format=3 uid="uid://cxjba712i3obi"]
+
+[ext_resource type="Script" path="res://Inventory System/InventoryUI/InventoryUI.cs" id="1_pnwnu"]
+[ext_resource type="PackedScene" uid="uid://58fb6yrb4l2l" path="res://Inventory System/InventoryUI/inventory_slot.tscn" id="1_vmbde"]
+[ext_resource type="Script" path="res://Inventory System/InventoryUI/TabManager.cs" id="2_mh6jh"]
+[ext_resource type="Script" path="res://Inventory System/InventoryUI/TabButton.cs" id="3_2melr"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gcfd6"]
+font_color = Color(0.513726, 0.513726, 0.513726, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kksku"]
+font_size = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_7ra0j"]
+font_size = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_vvr70"]
+font_size = 14
+
+[node name="InventoryUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 55.0
+offset_right = 64.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pnwnu")
+slotUI = ExtResource("1_vmbde")
+
+[node name="Header" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.00260417
+anchor_top = 0.00308642
+anchor_right = 0.236979
+anchor_bottom = 0.0339506
+offset_left = -3.0
+offset_top = -2.0
+offset_right = -12.375
+offset_bottom = -2.0
+color = Color(0.054902, 0.0588235, 0.0980392, 1)
+
+[node name="Label" type="Label" parent="Header"]
+layout_mode = 0
+offset_right = 270.0
+offset_bottom = 23.0
+text = "NAME"
+label_settings = SubResource("LabelSettings_gcfd6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Separation" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.00260417
+anchor_top = 0.0339506
+anchor_right = 0.236979
+anchor_bottom = 0.037037
+offset_left = -3.0
+offset_top = -2.0
+offset_right = -12.375
+offset_bottom = -2.0
+grow_vertical = 0
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.000868056
+anchor_top = 0.0713128
+anchor_right = 0.235243
+anchor_bottom = 0.54122
+offset_left = -1.0
+offset_top = -2.0
+offset_right = -10.375
+offset_bottom = -6.49997
+color = Color(0.0980392, 0.0980392, 0.176471, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.022
+anchor_bottom = 0.985
+offset_top = 10.0
+offset_right = -5.71976
+offset_bottom = 3.84882
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="GridContainer" type="GridContainer" parent="Background/ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 42)
+layout_mode = 2
+theme_override_constants/v_separation = 23
+
+[node name="InventorySlot" parent="Background/ScrollContainer/GridContainer" instance=ExtResource("1_vmbde")]
+layout_mode = 2
+
+[node name="InventorySlot2" parent="Background/ScrollContainer/GridContainer" instance=ExtResource("1_vmbde")]
+layout_mode = 2
+
+[node name="Tab Manager" type="Control" parent="." node_paths=PackedStringArray("tabs")]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_mh6jh")
+tabs = [NodePath("ALL tab"), NodePath("AID tab"), NodePath("APPAREL tab"), NodePath("MISC tab"), NodePath("KEY tab")]
+selectedColor = Color(0.0980392, 0.0980392, 0.176471, 1)
+unselectedColor = Color(0.0588235, 0.0588235, 0.113725, 1)
+
+[node name="ALL tab" type="Button" parent="Tab Manager"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_top = 21.0
+offset_right = 40.0
+offset_bottom = 42.0
+flat = true
+script = ExtResource("3_2melr")
+itemType = 4
+
+[node name="Tab" type="ColorRect" parent="Tab Manager/ALL tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.0980392, 0.0980392, 0.176471, 1)
+
+[node name="Separation" type="ColorRect" parent="Tab Manager/ALL tab"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_left = 40.0
+offset_right = 41.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.588235, 0.588235, 0.588235, 1)
+
+[node name="Label" type="Label" parent="Tab Manager/ALL tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 21.0
+text = "ALL
+"
+label_settings = SubResource("LabelSettings_kksku")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AID tab" type="Button" parent="Tab Manager"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 21.0
+offset_right = 80.0
+offset_bottom = 42.0
+flat = true
+script = ExtResource("3_2melr")
+itemType = 2
+
+[node name="Tab" type="ColorRect" parent="Tab Manager/AID tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.0588235, 0.0588235, 0.113725, 1)
+
+[node name="Separation" type="ColorRect" parent="Tab Manager/AID tab"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_left = 40.0
+offset_right = 41.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.588235, 0.588235, 0.588235, 1)
+
+[node name="Label" type="Label" parent="Tab Manager/AID tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 21.0
+text = "AID
+"
+label_settings = SubResource("LabelSettings_7ra0j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="APPAREL tab" type="Button" parent="Tab Manager"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 21.0
+offset_right = 149.0
+offset_bottom = 42.0
+flat = true
+script = ExtResource("3_2melr")
+itemType = 3
+
+[node name="Tab" type="ColorRect" parent="Tab Manager/APPAREL tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 69.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.0588235, 0.0588235, 0.113725, 1)
+
+[node name="Separation" type="ColorRect" parent="Tab Manager/APPAREL tab"]
+z_index = 1
+layout_mode = 0
+offset_left = 69.0
+offset_right = 70.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.588235, 0.588235, 0.588235, 1)
+
+[node name="Label" type="Label" parent="Tab Manager/APPAREL tab"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_right = 69.0
+offset_bottom = 21.0
+text = " APPAREL
+"
+label_settings = SubResource("LabelSettings_vvr70")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MISC tab" type="Button" parent="Tab Manager"]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 21.0
+offset_right = 213.0
+offset_bottom = 42.0
+flat = true
+script = ExtResource("3_2melr")
+
+[node name="Tab" type="ColorRect" parent="Tab Manager/MISC tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 63.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.0588235, 0.0588235, 0.113725, 1)
+
+[node name="Separation" type="ColorRect" parent="Tab Manager/MISC tab"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_left = 63.0
+offset_right = 64.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.588235, 0.588235, 0.588235, 1)
+
+[node name="Label" type="Label" parent="Tab Manager/MISC tab"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_right = 63.0
+offset_bottom = 21.0
+text = "MISC.
+"
+label_settings = SubResource("LabelSettings_vvr70")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KEY tab" type="Button" parent="Tab Manager"]
+layout_mode = 0
+offset_left = 213.0
+offset_top = 21.0
+offset_right = 261.0
+offset_bottom = 42.0
+flat = true
+script = ExtResource("3_2melr")
+itemType = 1
+
+[node name="Tab" type="ColorRect" parent="Tab Manager/KEY tab"]
+z_as_relative = false
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.0588235, 0.0588235, 0.113725, 1)
+
+[node name="Label" type="Label" parent="Tab Manager/KEY tab"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 21.0
+text = "KEY
+"
+label_settings = SubResource("LabelSettings_vvr70")
+horizontal_alignment = 1
+vertical_alignment = 1

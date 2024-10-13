@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dd3tvcy1qk677"]
+
+[ext_resource type="Script" path="res://Scripts/Hitbox/Hitbox.cs" id="1_8x3w4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q622p"]
+size = Vector3(1, 1, 1.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wipgm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_55yy8"]
+size = Vector3(1, 1, 1.5)
+
+[node name="Hitbox" type="Area3D"]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_8x3w4")
+shape = SubResource("BoxShape3D_q622p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_wipgm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_55yy8")

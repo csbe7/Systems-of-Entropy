@@ -1,0 +1,99 @@
+[gd_scene load_steps=8 format=3 uid="uid://bxg62b71k5pvh"]
+
+[ext_resource type="PackedScene" uid="uid://cn3uuptsj0lx7" path="res://Weapon System/UI/reload_bar.tscn" id="1_t3ium"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wfovi"]
+bg_color = Color(0.188235, 0.188235, 0.188235, 0.203922)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a84wb"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pxrkb"]
+bg_color = Color(1, 1, 1, 0.372549)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3uuv"]
+bg_color = Color(0.878431, 0.176471, 0.152941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lv4xf"]
+bg_color = Color(0.305882, 0.305882, 0.305882, 0.298039)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2chkx"]
+bg_color = Color(0.313726, 0.831373, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[node name="NPC_UI_bars" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Damage Bar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 57.0
+offset_right = 67.0
+offset_bottom = 67.0
+theme_override_styles/background = SubResource("StyleBoxFlat_wfovi")
+theme_override_styles/fill = SubResource("StyleBoxFlat_a84wb")
+value = 100.0
+show_percentage = false
+
+[node name="Health Bar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 57.0
+offset_right = 66.0
+offset_bottom = 67.0
+theme_override_styles/background = SubResource("StyleBoxFlat_pxrkb")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q3uuv")
+value = 100.0
+show_percentage = false
+
+[node name="Stamina Bar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 69.0
+offset_right = 67.0
+offset_bottom = 79.0
+theme_override_styles/background = SubResource("StyleBoxFlat_lv4xf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_2chkx")
+value = 100.0
+show_percentage = false
+
+[node name="Reload Bar" parent="." instance=ExtResource("1_t3ium")]
+unique_name_in_owner = true
+offset_top = 81.0
+offset_bottom = 91.0
+
+[node name="State" type="Label" parent="."]
+layout_mode = 0
+offset_top = 6.0
+offset_right = 73.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(2.31028e-06, 0.805528, 0.996404, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "state"

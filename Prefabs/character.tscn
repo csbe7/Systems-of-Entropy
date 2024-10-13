@@ -1,0 +1,140 @@
+[gd_scene load_steps=31 format=3 uid="uid://dwv8ggk75ut8e"]
+
+[ext_resource type="Script" path="res://NPC/CharacterSheet.cs" id="1_2mrqs"]
+[ext_resource type="Script" path="res://Player/CharacterController.cs" id="1_xeirl"]
+[ext_resource type="PackedScene" uid="uid://dxpyfrfpx0c4a" path="res://Inventory System/Item Drops/ItemDrop.tscn" id="2_f6ryj"]
+[ext_resource type="Script" path="res://Scripts/AnimationController.cs" id="2_k4oho"]
+[ext_resource type="Resource" uid="uid://bv40xnrbhcyhj" path="res://Scripts/RPG System/Status Effects/sprint_modifier.tres" id="3_yt5by"]
+[ext_resource type="Resource" uid="uid://dfoic5sjcpjgm" path="res://Scripts/RPG System/Status Effects/crouch_modifier.tres" id="4_8d3po"]
+[ext_resource type="Resource" uid="uid://bugw8nhlpa1wy" path="res://Scripts/RPG System/Faction System/Factions/player_faction.tres" id="4_qb1ch"]
+[ext_resource type="Script" path="res://Scripts/RPG System/WeaponManager.cs" id="5_apabm"]
+[ext_resource type="Script" path="res://Player/InputHandler.cs" id="5_jfo3q"]
+[ext_resource type="Resource" uid="uid://dl6ykc7s570w2" path="res://Inventory System/Items/Weapons/Remmington.tres" id="5_ji16g"]
+[ext_resource type="Resource" uid="uid://cionnbk2veef0" path="res://Scripts/RPG System/Status Effects/strafe_modifier.tres" id="5_wi20q"]
+[ext_resource type="Resource" uid="uid://c88oaxmpcqjia" path="res://Inventory System/Items/Ammo/9mm_bullet.tres" id="8_lmuln"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/SlotData.cs" id="9_cajkj"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/Inventory.cs" id="9_rtlox"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/InventoryData.cs" id="10_agvqa"]
+[ext_resource type="Resource" uid="uid://dudxuu3d86v7x" path="res://Inventory System/Items/Weapons/Fists.tres" id="11_b582f"]
+[ext_resource type="PackedScene" uid="uid://cxjba712i3obi" path="res://Inventory System/InventoryUI/inventoryUI.tscn" id="12_4tmwv"]
+[ext_resource type="Script" path="res://Inventory System/Inventory/InventoryManager.cs" id="12_nsu07"]
+[ext_resource type="PackedScene" uid="uid://fdhuxr6mpru0" path="res://Inventory System/InventoryUI/quantity_selector.tscn" id="13_2mfrh"]
+[ext_resource type="PackedScene" uid="uid://cn3uuptsj0lx7" path="res://Weapon System/UI/reload_bar.tscn" id="14_ovl7x"]
+[ext_resource type="Script" path="res://Player/UImanager.cs" id="15_8jl0i"]
+[ext_resource type="Script" path="res://Scripts/Utility/Follow.cs" id="19_q27bk"]
+[ext_resource type="PackedScene" uid="uid://dlapkiauk1j8w" path="res://Prefabs/humanoid_mesh.tscn" id="20_l4gt8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6p5v2"]
+radius = 0.25
+height = 1.8
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vptph"]
+viewport_path = NodePath("CharacterUI")
+
+[sub_resource type="Resource" id="Resource_2nkft"]
+script = ExtResource("9_cajkj")
+item = ExtResource("11_b582f")
+amount = 1
+charge = 0
+
+[sub_resource type="Resource" id="Resource_qyvqc"]
+script = ExtResource("9_cajkj")
+item = ExtResource("8_lmuln")
+amount = 999
+charge = 0
+
+[sub_resource type="Resource" id="Resource_6w5xf"]
+script = ExtResource("9_cajkj")
+item = ExtResource("5_ji16g")
+amount = 1
+charge = 6
+
+[sub_resource type="Resource" id="Resource_2msgs"]
+script = ExtResource("9_cajkj")
+item = ExtResource("5_ji16g")
+amount = 1
+charge = 6
+
+[sub_resource type="Resource" id="Resource_rlihp"]
+resource_local_to_scene = true
+script = ExtResource("10_agvqa")
+items = [SubResource("Resource_qyvqc"), SubResource("Resource_6w5xf"), SubResource("Resource_2msgs")]
+
+[node name="CharacterBody" type="CharacterBody3D" groups=["Player"]]
+unique_name_in_owner = true
+collision_layer = 6
+collision_mask = 27
+script = ExtResource("1_2mrqs")
+name = "Player"
+faction = ExtResource("4_qb1ch")
+sprintSpeedModifier = ExtResource("3_yt5by")
+sneakSpeedModifier = ExtResource("4_8d3po")
+strafeSpeedModifier = ExtResource("5_wi20q")
+sprintStamPerSec = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00720215, 0.873736, -0.00335693)
+shape = SubResource("CapsuleShape3D_6p5v2")
+
+[node name="CharacterUI Display" type="Sprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0574, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_vptph")
+
+[node name="CharacterUI" type="SubViewport" parent="."]
+unique_name_in_owner = true
+transparent_bg = true
+size = Vector2i(67, 10)
+
+[node name="ReloadBar" parent="CharacterUI" instance=ExtResource("14_ovl7x")]
+visible = false
+inverse = true
+
+[node name="InputHandler" type="Node" parent="."]
+script = ExtResource("5_jfo3q")
+
+[node name="CharacterController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_xeirl")
+
+[node name="AnimationController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_k4oho")
+rotationSpeed = 15.0
+lerpSpeed = 15.0
+
+[node name="WeaponManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_apabm")
+unarmed = SubResource("Resource_2nkft")
+
+[node name="InventoryManager" type="Node" parent="." node_paths=PackedStringArray("inventory")]
+unique_name_in_owner = true
+script = ExtResource("12_nsu07")
+inventory = NodePath("../Inventory")
+inventoryScene = ExtResource("12_4tmwv")
+quantitySelectionUI = ExtResource("13_2mfrh")
+itemDrop = ExtResource("2_f6ryj")
+maxDistanceFromContainer = 5.0
+
+[node name="Inventory" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_rtlox")
+inv = SubResource("Resource_rlihp")
+
+[node name="UI Manager" type="Node" parent="." node_paths=PackedStringArray("sheet", "wm", "reloadBar")]
+unique_name_in_owner = true
+script = ExtResource("15_8jl0i")
+sheet = NodePath("..")
+wm = NodePath("../WeaponManager")
+reloadBar = NodePath("../CharacterUI/ReloadBar")
+
+[node name="Break Transform Inheritance" type="Node" parent="."]
+
+[node name="Mesh" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("19_q27bk")
+
+[node name="HumanoidMesh" parent="Mesh" instance=ExtResource("20_l4gt8")]

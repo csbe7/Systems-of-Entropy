@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://c80jju6of51ar"]
+
+[ext_resource type="Script" path="res://Dialog System/Dialog Node Picker/DialogNodePickerButton.cs" id="1_wqah2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajd0c"]
+bg_color = Color(0.100947, 0.150854, 0.284166, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6woja"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_yc0qg"]
+font_size = 15
+
+[node name="Node Picker Button" type="Button"]
+z_index = 2
+custom_minimum_size = Vector2(144, 22)
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_styles/hover = SubResource("StyleBoxFlat_ajd0c")
+theme_override_styles/normal = SubResource("StyleBoxFlat_6woja")
+script = ExtResource("1_wqah2")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(144, 20)
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 22.0
+text = "Add node"
+label_settings = SubResource("LabelSettings_yc0qg")

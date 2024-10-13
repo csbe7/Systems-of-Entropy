@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponAnimations" load_steps=2 format=3 uid="uid://dw5gmmykinq12"]
+
+[ext_resource type="Script" path="res://Weapon System/Weapon Animations/WeaponAnimations.cs" id="1_28i77"]
+
+[resource]
+script = ExtResource("1_28i77")
+lib = "rifle_animations"
+sprint = "rifle_sprint"
+draw = "draw_rifle"
+standingIdle = "rifle_standing_idle"
+walkForward = "rifle_walk_forward"
+walkBackward = "rifle_walk_backward"
+walkRight = "rifle_walk_right"
+walkLeft = "rifle_walk_left"
+walkForwardRight = "rifle_walk_forward_right"
+walkForwardLeft = "rifle_walk_forward_left"
+walkBackwardRight = "rifle_walk_backward_right"
+walkBackwardLeft = "rifle_walk_backward_left"
+crouchingIdle = "rifle_crouching_idle"
+crouchForward = "rifle_crouching_walk_forward"
+crouchBackward = "rifle_crouching_walk_backward"
+crouchRight = "rifle_crouching_walk_right"
+crouchLeft = "rifle_crouching_walk_left"
+crouchForwardRight = "rifle_crouching_walk_forward_right"
+crouchForwardLeft = "rifle_crouching_walk_forward_left"
+crouchBackwardRight = "rifle_crouching_walk_backward_right"
+crouchBackwardLeft = "rifle_crouching_walk_backward_left"

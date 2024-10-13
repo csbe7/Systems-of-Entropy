@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://dqw5erhjeuwva"]
+
+[ext_resource type="Script" path="res://Dialog System/DialogNode.cs" id="1_ati4p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3rxis"]
+bg_color = Color(1, 0.168627, 0.176471, 0.756863)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mknoa"]
+bg_color = Color(0.896646, 0, 0.0934081, 0.756863)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_277y7"]
+content_margin_left = 60.0
+bg_color = Color(1, 0.125148, 0.0807021, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut8jh"]
+content_margin_left = 60.0
+bg_color = Color(0.868847, 0.0137572, 1.05888e-06, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[node name="End Node" type="GraphNode"]
+custom_minimum_size = Vector2(45, 70)
+offset_right = 100.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3rxis")
+theme_override_styles/panel_selected = SubResource("StyleBoxFlat_mknoa")
+theme_override_styles/titlebar = SubResource("StyleBoxFlat_277y7")
+theme_override_styles/titlebar_selected = SubResource("StyleBoxFlat_ut8jh")
+title = "End"
+script = ExtResource("1_ati4p")
+slotNumberLeft = 1

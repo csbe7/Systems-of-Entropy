@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://bd4o287gtetsg"]
+
+[ext_resource type="Script" path="res://Dialog System/DialogNode.cs" id="1_xlexm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r8q7n"]
+content_margin_left = 3.0
+bg_color = Color(0.21258, 0.275504, 0.067896, 0.988235)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibovw"]
+content_margin_left = 3.0
+bg_color = Color(0.155427, 0.204902, 0.0416826, 0.988235)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2x6wd"]
+content_margin_left = 3.0
+bg_color = Color(0.473379, 0.629189, 1.34766e-06, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbdq4"]
+content_margin_left = 3.0
+bg_color = Color(0.372653, 0.49876, 6.73831e-07, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[node name="Start Node" type="GraphNode"]
+custom_minimum_size = Vector2(100, 70)
+offset_right = 100.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_r8q7n")
+theme_override_styles/panel_selected = SubResource("StyleBoxFlat_ibovw")
+theme_override_styles/titlebar = SubResource("StyleBoxFlat_2x6wd")
+theme_override_styles/titlebar_selected = SubResource("StyleBoxFlat_cbdq4")
+title = "Start"
+script = ExtResource("1_xlexm")
+slotNumberRight = 1
