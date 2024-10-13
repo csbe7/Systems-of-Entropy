@@ -100,7 +100,7 @@ public partial class CharacterController : Node
         Move(ts, D);
         Friction(D);
         
-        //sheet.MoveAndSlide();
+        sheet.MoveAndSlide();
     }
     
 
