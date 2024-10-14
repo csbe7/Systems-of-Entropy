@@ -7,7 +7,7 @@ public partial class Hitbox : Area3D
     [Export] Shape3D shape;
     public CharacterSheet attacker;
     public Weapon weapon;
-    //public AttackInfo hitInfo;
+    public AttackInfo hitInfo;
 
     public override void _Ready()
     {
@@ -27,7 +27,13 @@ public partial class Hitbox : Area3D
         exclude.Add(attacker.GetRid());
         //if (Game.Raycast(attacker, attacker.GetCenterPosition(), sheet.GetCenterPosition(), Game.GetBitMask(Game.world_layers)).Count > 0) return;
         AttackInfo attack = (AttackInfo)weapon.attackInfo.Duplicate();
-        attack.knockbackDir = (sheet.GlobalPosition - attacker.GlobalPosition).Normalized();
+
+        Vector3 dir = (sheet.GlobalPosition - attacker.GlobalPosition).Normalized();
+        float angle = dir.AngleTo(Vector3.Forward);
+        attack.knockbackDir = attack.knockbackDir.Rotated(Vector3.Up, angle);
+        angle = dir.AngleTo(Vector3.Up);
+        attack.knockbackDir = attack.knockbackDir.Rotated(Vector3.Right, angle);
+
         attack.attacker = attacker;
 
         sheet.TakeAttack(attack);

@@ -48,7 +48,7 @@ size = 13.0
 far = 150.0
 
 [node name="Character" parent="." instance=ExtResource("1_yrlix")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.248891, 0.97, -7.72359)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17496, -7.724)
 
 [node name="Enemy" parent="." instance=ExtResource("6_3ykpg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.252, 1.08018, 4.221)

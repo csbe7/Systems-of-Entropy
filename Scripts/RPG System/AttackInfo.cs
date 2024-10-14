@@ -8,8 +8,9 @@ public partial class AttackInfo : Resource
     
     [Export] public float damage;
     [Export] public float knockback;
-    public Vector3 knockbackDir;
+    [Export] public Vector3 knockbackDir;
     [Export] public float hitstunDuration;
+    [Export] public Curve hitReactionCurve;
     
     public enum AttackType{
         meele,

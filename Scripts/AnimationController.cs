@@ -9,6 +9,7 @@ public partial class AnimationController : Node
     Node3D meshPivot;
     public MeshSelection humanoidMesh;
     
+    public AnimationPlayer ap;
     public AnimationTree at;
 
     AnimationNodeStateMachine stateMachine;
@@ -45,6 +46,7 @@ public partial class AnimationController : Node
         humanoidMesh = meshPivot.GetNode<MeshSelection>("HumanoidMesh");
 
         at = humanoidMesh.GetNode<AnimationTree>("%AnimationTree");
+        ap = humanoidMesh.GetNode<AnimationPlayer>("%AnimationPlayer");
 
         stateMachine = (AnimationNodeStateMachine)at.TreeRoot;
 		stateMachinePlayback = (AnimationNodeStateMachinePlayback)at.Get("parameters/playback");
@@ -66,6 +68,7 @@ public partial class AnimationController : Node
     {
         if (on) leftArmIK.Start();
         else leftArmIK.Stop();
+        //GD.Print(on);
     }
 
     public void onChangeState()
@@ -186,6 +189,9 @@ public partial class AnimationController : Node
         //RECOIL
         if (cc.isAttacking && cc.wm.currWeapon.weaponType == Weapon.WeaponType.ranged) Recoil(Delta);
 
+        //HIT REACTION
+        if (cc.isStunned) HitReaction(Delta);
+
     }
 
 
@@ -210,24 +216,26 @@ public partial class AnimationController : Node
     {
         int bone = skeleton.FindBone(rightArmIK.TipBone);
         Transform3D boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
-        Vector3 StartPos = boneTransformLocal.Origin;//skeleton.ToGlobal(boneTransformLocal.Origin);
+        Vector3 StartPos = boneTransformLocal.Origin;
         
         rightHandTarget = humanoidMesh.GetNode<Node3D>("%right_arm_target");
         //rightHandTarget.Position = StartPos;
         rightHandTarget.Basis = boneTransformLocal.Basis;
+        rightHandTarget.Transform = boneTransformLocal;
         
         //set target pos
         Vector3 newPos = StartPos;
         newPos.Z = newPos.Z - (cc.wm.currWeapon.kickback);
         rightHandTarget.Position = newPos;
 
-        bone = skeleton.FindBone("Neck");
+        bone = skeleton.FindBone(headIK.TipBone);
         boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
         StartPos = boneTransformLocal.Origin;
 
         headTarget = humanoidMesh.GetNode<Node3D>("%head_target");
         //headTarget.Position = StartPos;
         headTarget.Basis = boneTransformLocal.Basis;
+        headTarget.Transform = boneTransformLocal;
 
         newPos = StartPos; //- (headTarget.Basis.Z * c.wm.currWeapon.kickback);
         newPos.Z = newPos.Z -(cc.wm.currWeapon.kickback * 0.5f);
@@ -239,18 +247,39 @@ public partial class AnimationController : Node
     }
     
     float recoilProgress = 0;
-    float curveSample;
+    float recoilCurveSample;
     public void Recoil(float delta)
     {
-        curveSample = cc.wm.currWeapon.recoilCurve.Sample(recoilProgress);
+        //TEST
+        headIK.Stop();
+        rightArmIK.Stop();
+        int bone = skeleton.FindBone(rightArmIK.TipBone);
+        Transform3D boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
+        Vector3 StartPos = boneTransformLocal.Origin;
+        Vector3 newPos = StartPos;
+        newPos.Z = newPos.Z - (cc.wm.currWeapon.kickback);
+        rightHandTarget.Position = newPos;
+
+        bone = skeleton.FindBone(headIK.TipBone);
+        boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
+        StartPos = boneTransformLocal.Origin;
+
+        headTarget = humanoidMesh.GetNode<Node3D>("%head_target");
+        headTarget.Transform = boneTransformLocal;
+
+        newPos = StartPos; 
+        newPos.Z = newPos.Z -(cc.wm.currWeapon.kickback * 0.5f);
+        headTarget.Position = newPos;
         
-        rightArmIK.Interpolation = curveSample;
-        headIK.Interpolation = curveSample;
-        /*Transform3D boneTransformLocal = skeleton.GetBoneGlobalPose(chest);
-        boneTransformLocal.Origin = chestStartPos - (c.forwardDir.Normalized() * c.wm.currWeapon.kickback * curveSample * 0.05f);
-        skeleton.SetBonePosePosition(chest, boneTransformLocal.Origin);
-        skeleton.SetBonePoseRotation(chest, boneTransformLocal.Basis.GetRotationQuaternion());*/
+        headIK.Start();
+        rightArmIK.Start();
+        //END TEST
+ 
+        recoilCurveSample = cc.wm.currWeapon.recoilCurve.Sample(recoilProgress);
         
+        rightArmIK.Interpolation = recoilCurveSample;
+        headIK.Interpolation = recoilCurveSample;
+
         recoilProgress += delta * cc.wm.currWeapon.recoilSpeed;
 
         if (recoilProgress > 1)
@@ -263,6 +292,49 @@ public partial class AnimationController : Node
         }
     }
     
+
+    public void StartHitReaction(AttackInfo att)
+    {
+        cc.isStunned = true;
+        attack = att;
+        headIK.Start();
+    }
+    
+    AttackInfo attack;
+    float reactionProgress = 0;
+    float reactionCurveSample;
+    public void HitReaction(float delta)
+    {
+        headIK.Stop();
+        
+        int bone = skeleton.FindBone(headIK.TipBone);
+        Transform3D boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
+        Vector3 startPos = boneTransformLocal.Origin;
+        Vector3 newPos = startPos;
+
+        headTarget = humanoidMesh.GetNode<Node3D>("%head_target");
+        headTarget.Transform = boneTransformLocal;
+
+        newPos += attack.knockbackDir.Normalized() * attack.knockback * 0.1f;
+        headTarget.Position = newPos;
+
+        headIK.Start();
+
+        reactionCurveSample = attack.hitReactionCurve.Sample(reactionProgress);
+
+        headIK.Interpolation = reactionCurveSample;
+
+        reactionProgress += delta/attack.hitstunDuration;
+
+        if (reactionProgress > 1)
+        {
+            reactionProgress = 0;
+            headIK.Stop();
+            cc.isStunned = false;
+        }
+    }
+
+
     public void StartAttack()
     {
         at.Set("parameters/MoveState/attack/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);

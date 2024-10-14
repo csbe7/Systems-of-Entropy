@@ -305,13 +305,14 @@ public partial class WeaponManager : Node
     
     Hitbox hitbox;
     public void OnHitStarted()
-    {
-        
+    {  
         hitbox = currWeapon.hitbox.Instantiate<Hitbox>();
         sheet.AddChild(hitbox);
         hitbox.GlobalPosition = sheet.GetCenterPosition() + cc.forwardDir;
         hitbox.attacker = sheet;
         hitbox.weapon = currWeapon;
+        if (currWeapon.attackData.Count > comboCounter) hitbox.hitInfo = (AttackInfo)currWeapon.attackData[0].Duplicate();
+        else hitbox.hitInfo = (AttackInfo)currWeapon.attackData[comboCounter].Duplicate();
         hitbox.LookAt(hitbox.GlobalPosition + cc.forwardDir);
     }
 

@@ -41,7 +41,7 @@ public partial class Projectile_bullet : Projectile
             AttackInfo attack = (AttackInfo)weapon.attackInfo.Duplicate();
             attack.knockbackDir = direction.Normalized();
             attack.attacker = shooter;
-
+   
             sheet.TakeAttack(attack);
             //shooter.wm.OnWeaponHit(cs);
         }

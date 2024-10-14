@@ -37,6 +37,7 @@ public partial class CharacterController : Node
     public bool isDashing;
     public bool isStrafing;
     public bool isAttacking;
+    public bool isStunned;
 
     public bool canAttack;
     public bool canDrawWeapon;
@@ -78,6 +79,8 @@ public partial class CharacterController : Node
         dashStamBlockTimer = new ScaledTimer();
         dashStamBlockTimer.Timeout += EndDashStaminaBlock;
         sheet.AddTimer(dashStamBlockTimer);
+
+        sheet.Attacked += StartHitStun;
         
         forwardDir = sheet.GlobalBasis.Z;
     }
@@ -270,9 +273,9 @@ public partial class CharacterController : Node
         drawingWeapon = false;
 
       
-        if (wm.currWeapon.useleftArmIK) ac.SetLeftArmIK(true);
+        if (wm.currWeapon.useLeftArmIK) ac.SetLeftArmIK(true);
         else ac.SetLeftArmIK(false);
-
+    
         
     }
 
@@ -306,5 +309,10 @@ public partial class CharacterController : Node
         if (!holdingWeapon || !canDrawWeapon || isSprinting) return;
         StartHolsteringWeapon();
     }
-
+    
+    public void StartHitStun(AttackInfo attack)
+    {
+        moveInputBlockers++;
+        ac.StartHitReaction(attack);
+    }
 }

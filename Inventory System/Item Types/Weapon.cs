@@ -16,6 +16,7 @@ public partial class Weapon : Item
     [ExportCategory("Gamepay Settings")]
     //[Export] public PackedScene projectile;
     [Export] public AttackInfo attackInfo;
+    [Export] public Godot.Collections.Array<AttackInfo> attackData = new Godot.Collections.Array<AttackInfo>();
 
     [Export] public StatModifier attackSpeedMod;
     [Export] public StatModifier strafeSpeedMod;
@@ -60,7 +61,7 @@ public partial class Weapon : Item
     [ExportCategory("IK")]
     [Export] public Vector3 leftArm_target_rotation;
     [Export] public Vector3 leftArm_target_position;
-    [Export] public bool useleftArmIK = true;
+    [Export] public bool useLeftArmIK = true;
     
     [ExportCategory("Recoil")]
     [Export] public float kickback;

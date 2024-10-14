@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=12 format=3 uid="uid://dl6ykc7s570w2"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=15 format=3 uid="uid://dl6ykc7s570w2"]
 
 [ext_resource type="ArrayMesh" uid="uid://bje8b15nmali1" path="res://Models/Weapons/Meshes/remmignton.tres" id="1_d334v"]
 [ext_resource type="Resource" uid="uid://dw5gmmykinq12" path="res://Weapon System/Weapon Animations/rifle_animations.tres" id="1_g7gcr"]
@@ -7,11 +7,31 @@
 [ext_resource type="Script" path="res://Inventory System/Item Types/Weapon.cs" id="3_g3dni"]
 [ext_resource type="PackedScene" uid="uid://5bsloyfedek8" path="res://Prefabs/Projectiles/bullet_projectile.tscn" id="4_yp6js"]
 
+[sub_resource type="Curve" id="Curve_43el2"]
+_data = [Vector2(0, 0), 0.0, 5.0, 0, 0, Vector2(0.35, 1), 0.0, -1.0, 0, 0, Vector2(1, 0), -1.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_37v7h"]
+script = ExtResource("2_pp2yi")
+damage = 10.0
+knockback = 1.0
+knockbackDir = Vector3(0, 0, -1)
+hitstunDuration = 0.3
+hitReactionCurve = SubResource("Curve_43el2")
+attackType = 1
+damageType = 0
+
+[sub_resource type="Curve" id="Curve_qgqkg"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="Resource" id="Resource_ogmuj"]
 script = ExtResource("2_pp2yi")
 damage = 10.0
-knockback = 0.0
-hitstunDuration = 0.1
+knockback = 1.0
+knockbackDir = Vector3(0, 0, 0)
+hitstunDuration = 0.3
+hitReactionCurve = SubResource("Curve_qgqkg")
 attackType = 1
 damageType = 0
 
@@ -42,6 +62,7 @@ resource_local_to_scene = true
 script = ExtResource("3_g3dni")
 weaponType = 1
 attackInfo = SubResource("Resource_ogmuj")
+attackData = [SubResource("Resource_37v7h")]
 attackSpeedMod = SubResource("Resource_wlujc")
 strafeSpeedMod = SubResource("Resource_eu84i")
 hold = false
@@ -68,7 +89,7 @@ triggerRotation = Vector3(0, 0, 0)
 scale = Vector3(1.6, 1.5, 1.5)
 leftArm_target_rotation = Vector3(0.186251, -0.351917, 0.623968)
 leftArm_target_position = Vector3(-0.104312, -0.0455531, 0.00342834)
-useleftArmIK = true
+useLeftArmIK = false
 kickback = 0.1
 kickup = 30.0
 recoilSpeed = 3.0
