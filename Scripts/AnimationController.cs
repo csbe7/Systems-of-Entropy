@@ -305,18 +305,20 @@ public partial class AnimationController : Node
     float reactionCurveSample;
     public void HitReaction(float delta)
     {
+        at.Set("parameters/MoveState/attack/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+        
         headIK.Stop();
         
         int bone = skeleton.FindBone(headIK.TipBone);
         Transform3D boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
-        Vector3 startPos = boneTransformLocal.Origin;
+        Vector3 startPos = skeleton.ToGlobal(boneTransformLocal.Origin);
         Vector3 newPos = startPos;
 
         headTarget = humanoidMesh.GetNode<Node3D>("%head_target");
         headTarget.Transform = boneTransformLocal;
 
         newPos += attack.knockbackDir.Normalized() * attack.knockback * 0.1f;
-        headTarget.Position = newPos;
+        headTarget.GlobalPosition = newPos;
 
         headIK.Start();
 

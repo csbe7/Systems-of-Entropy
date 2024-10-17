@@ -50,7 +50,6 @@ public partial class DialogEditor : GraphEdit
 
     public void OnNodeSelected(Node node)
     {
-        
         if (node is DialogNode dialogNode)
         {
             selectedNodes.Add(dialogNode);
@@ -71,6 +70,7 @@ public partial class DialogEditor : GraphEdit
         {
             if (IsInstanceValid(node)) node.QueueFree();
         }
+        selectedNodes.Clear();
     }
 
     public void SaveTree(string tree_name)

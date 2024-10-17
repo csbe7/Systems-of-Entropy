@@ -312,7 +312,6 @@ public partial class CharacterController : Node
     
     public void StartHitStun(AttackInfo attack)
     {
-        moveInputBlockers++;
         ac.StartHitReaction(attack);
     }
 }

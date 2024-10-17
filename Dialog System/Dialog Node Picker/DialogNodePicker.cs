@@ -26,8 +26,9 @@ public partial class DialogNodePicker : Control
     public void OnNodePicked(PackedScene node)
     {
         var dialogNode = node.Instantiate<GraphNode>();
+        var editor = GetParent<DialogEditor>();
         GetParent().AddChild(dialogNode);
-        dialogNode.GlobalPosition = GlobalPosition;
+        dialogNode.PositionOffset = (GlobalPosition - new Vector2(578, 324)) - editor.ScrollOffset;
         //dialogNode.SetEditableInstance(dialogNode, true);
         //GD.Print(dialogNode.GlobalPosition);
         QueueFree();

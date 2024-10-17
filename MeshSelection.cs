@@ -23,11 +23,11 @@ public partial class MeshSelection : Node3D
     PhysicalBoneSimulator3D ragdollSimulator;
     public override void _Ready()
     {
-        if (!Engine.IsEditorHint())
+        /*if (!Engine.IsEditorHint())
         {
             ragdollSimulator = GetNode<PhysicalBoneSimulator3D>("%PhysicalBoneSimulator3D");
             ragdollSimulator.PhysicalBonesStartSimulation();
-        }
+        }*/
         
         ApplyMeshes();
     }
