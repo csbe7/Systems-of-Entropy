@@ -10,4 +10,6 @@ ammoDangerMax = 10.0
 exposureDanger = 10.0
 exposureDangerMax = 30.0
 hideTreshold = 50.0
-reloadTreshold = 50.0
+maxHideTime = 20.0
+hideCooldown = 5.0
+reloadTreshold = 100.0

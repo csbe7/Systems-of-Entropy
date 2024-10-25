@@ -26,17 +26,16 @@ public partial class Hitbox : Area3D
         exclude.Add(sheet.GetRid()); 
         exclude.Add(attacker.GetRid());
         //if (Game.Raycast(attacker, attacker.GetCenterPosition(), sheet.GetCenterPosition(), Game.GetBitMask(Game.world_layers)).Count > 0) return;
-        AttackInfo attack = (AttackInfo)weapon.attackInfo.Duplicate();
 
         Vector3 dir = (sheet.GlobalPosition - attacker.GlobalPosition).Normalized();
         float angle = dir.AngleTo(Vector3.Forward);
-        attack.knockbackDir = attack.knockbackDir.Rotated(Vector3.Up, angle);
+        hitInfo.knockbackDir = hitInfo.knockbackDir.Rotated(Vector3.Up, angle);
         angle = dir.AngleTo(Vector3.Up);
-        attack.knockbackDir = attack.knockbackDir.Rotated(Vector3.Right, angle);
+        hitInfo.knockbackDir = hitInfo.knockbackDir.Rotated(Vector3.Right, angle);
 
-        attack.attacker = attacker;
+        hitInfo.attacker = attacker;
 
-        sheet.TakeAttack(attack);
+        sheet.TakeAttack(hitInfo);
 
     }
 

@@ -19,7 +19,7 @@ public partial class FactionManager : Node
 
         foreach(Faction faction in Factions)
         {
-            GD.Print(faction.name);
+            //GD.Print(faction.name);
         }
     }
 

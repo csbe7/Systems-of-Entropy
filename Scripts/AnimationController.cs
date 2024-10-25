@@ -57,7 +57,7 @@ public partial class AnimationController : Node
         leftArmIK = humanoidMesh.GetNode<SkeletonIK3D>("%left_arm_IK3D");
         headIK = humanoidMesh.GetNode<SkeletonIK3D>("%head_IK3D");
 
-        cc.StateChanged += onChangeState;
+        cc.StateChanged += OnChangeState;
 
         humanoidMesh.ApplyMeshes();
         humanoidMesh.WeaponPlaced += cc.wm.ToggleHolster;
@@ -71,7 +71,7 @@ public partial class AnimationController : Node
         //GD.Print(on);
     }
 
-    public void onChangeState()
+    public void OnChangeState()
     {
         if (cc.isSprinting)
         {
@@ -119,19 +119,18 @@ public partial class AnimationController : Node
         float timescale = animationTimescale * cc.sheet.localTimescale * cc.game.Timescale;
 
         at.Set("parameters/MoveState/animationTimescale/scale", timescale);
+
+        if (!cc.isSprinting) at.Set("parameters/MoveState/movementTimescale/scale", Mathf.Clamp(cc.sheet.GetStatValue("Speed")/cc.sheet.speed, 0.5f, 1.5f));
+        else at.Set("parameters/MoveState/movementTimescale/scale", Mathf.Clamp(cc.sheet.GetStatValue("Speed")/(cc.sheet.speed * (1 + cc.sheet.sprintSpeedModifier.value/100)), 0.5f, 1.5f));
         
         float Delta = (float)delta * animationTimescale * cc.sheet.localTimescale * cc.game.Timescale; 
 
         if (IsInstanceValid(tween)) tween.CustomStep(Delta);
         at.Advance(Delta);
         
-        //MOVE DIRECTION AND GUN TOGGLE
-        /*Vector3 inputDir = new Vector3(c.inputDir.X, 0f, c.inputDir.Y);
-        inputDir = inputDir.Rotated(Vector3.Up, (float)Math.PI/4);
-        Vector3 moveDir3D = (inputDir.Z * meshPivot.GlobalBasis.Z) + (inputDir.X * meshPivot.GlobalBasis.X);
-        Vector2 moveDir = new Vector2 (moveDir3D.X, moveDir3D.Z);*/
         
         Vector2 moveDir = new Vector2(cc.moveDir.Dot(cc.forwardDir.Rotated(Vector3.Up, -(float)Math.PI/2)), cc.moveDir.Dot(cc.forwardDir));
+        if (cc.isStunned) moveDir = Vector2.Zero;
 
         if (cc.sheet.GetStatValue("Speed", true) == 0) moveDir = Vector2.Zero;
 
@@ -295,7 +294,12 @@ public partial class AnimationController : Node
 
     public void StartHitReaction(AttackInfo att)
     {
-        cc.isStunned = true;
+        if (cc.isAttacking || cc.isRecovering)
+        {
+            AbortAttack(1);
+        }
+
+        //cc.isStunned = true;
         attack = att;
         headIK.Start();
     }
@@ -305,7 +309,6 @@ public partial class AnimationController : Node
     float reactionCurveSample;
     public void HitReaction(float delta)
     {
-        at.Set("parameters/MoveState/attack/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
         
         headIK.Stop();
         
@@ -332,15 +335,22 @@ public partial class AnimationController : Node
         {
             reactionProgress = 0;
             headIK.Stop();
-            cc.isStunned = false;
+            cc.EndHitStun();
         }
     }
 
 
     public void StartAttack()
     {
+        if (cc.isRecovering) AbortAttack();
         at.Set("parameters/MoveState/attack/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
-        
+    }
+
+    public void AbortAttack(int mode = 0)
+    {
+        if (mode == 0) at.Set("parameters/MoveState/attack/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+        else at.Set("parameters/MoveState/attack/request", (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+        cc.wm.OnAttackEnded();
     }
 
     public void DrawWeapon()

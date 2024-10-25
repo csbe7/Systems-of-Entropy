@@ -20,4 +20,5 @@ shape = SubResource("BoxShape3D_q622p")
 shape = SubResource("BoxShape3D_wipgm")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_55yy8")

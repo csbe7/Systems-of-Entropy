@@ -5,7 +5,7 @@ using System;
 public partial class Personality : Resource
 {
     //[Export] public float healthDangerMultiplier;
-    [ExportCategory("Values")]
+    [ExportCategory("Danger Calculation")]
     [Export] public float healthDangerMax = 40;
     //[Export] public float staminaDangerMultiplier;
     [Export] public float staminaDangerMax = 20;
@@ -16,5 +16,13 @@ public partial class Personality : Resource
     
     [ExportCategory("Behavior")]
     [Export] public float hideTreshold;
+    [Export] public float maxHideTime = 60;
+    [Export] public float hideCooldown;
     [Export] public float reloadTreshold;
+
+    [ExportCategory("Target Selection")]
+    [Export] public float targetFocus = 2;
+    [Export] public float distanceWeight = 1;
+    [Export] public float healthWeight = 1;
+    [Export] public float sightWeight = 1;
 }

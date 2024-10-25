@@ -9,7 +9,7 @@ public partial class NPC_UImanager : Node
 
     [Export] Control ui;
 
-    ProgressBar hpbar, damagebar, staminabar;
+    ProgressBar hpbar, damagebar, staminabar, attackchargebar;
     TimerBar reloadBar;
 
     Label stateLabel;
@@ -25,6 +25,7 @@ public partial class NPC_UImanager : Node
         hpbar = ui.GetNode<ProgressBar>("%Health Bar");
         damagebar = ui.GetNode<ProgressBar>("%Damage Bar");
         staminabar = ui.GetNode<ProgressBar>("%Stamina Bar");
+        attackchargebar = ui.GetNode<ProgressBar>("%Attack Charge Bar");
 
         stateLabel = ui.GetNode<Label>("State");
 
@@ -43,7 +44,8 @@ public partial class NPC_UImanager : Node
         OnHealthChanged(0);
         
         ui.Hide();
-
+        
+        attackchargebar.Hide();
         reloadBar.HideAll();
     }
 
@@ -129,6 +131,18 @@ public partial class NPC_UImanager : Node
         {
             staminabar.Value += stamLerpSpeed * 3f * D;
             if (staminabar.Value > stamPercent) staminabar.Value = stamPercent;
+        }
+
+        if (ai.attackChargeTimer.countdown > 0 && ai.attackChargeTimer.countdown != NPC_AI.ATTACK_CHARGE_IDLE_VALUE)
+        {
+            attackchargebar.Show();
+            float t = ai.wm.currWeapon.delayUseTime;
+            float c = ai.attackChargeTimer.countdown;
+            attackchargebar.Value = ((t - c)/t) * 100;
+        }
+        else
+        {
+            attackchargebar.Hide();
         }
     }
 }

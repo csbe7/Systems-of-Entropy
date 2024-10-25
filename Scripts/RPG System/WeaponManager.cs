@@ -106,6 +106,8 @@ public partial class WeaponManager : Node
             sheet.RemoveStatModifier(currWeapon.strafeSpeedMod, "Speed");
         }
 
+        if (cc.isAttacking || cc.isRecovering) OnAttackEnded();
+
 
         currWeaponSlotData = null;
         currWeapon = null;
@@ -116,6 +118,9 @@ public partial class WeaponManager : Node
         else weapon = handAttachment.GetNode<Node3D>("Weapon"); 
         weapon.GetNode<MeshInstance3D>("MeshInstance3D").Mesh = null;
         //ac.SetLeftArmIK(false);
+
+        progressCombo = false;
+        comboCounter = 0;
 
         EmitSignal(SignalName.WeaponUnequipped);
         EquipWeapon(unarmed);
@@ -238,7 +243,7 @@ public partial class WeaponManager : Node
     public void UseWeapon(bool progress = false)
     {
         //CONSUME CHARGE
-        if (currWeapon.useCharge)
+        if (currWeapon.useCharge && !cc.isAttacking)
         {
             if (currWeaponSlotData.charge < currWeapon.chargePerAttack) return;
             //ELSE
@@ -249,6 +254,7 @@ public partial class WeaponManager : Node
         if (currWeapon.weaponType == Weapon.WeaponType.ranged)
         {
             if (cc.isAttacking) return;
+
             Projectile proj = currWeapon.projectile.Instantiate<Projectile>();
             proj.shooter = sheet;
             proj.direction = cc.forwardDir;
@@ -266,21 +272,31 @@ public partial class WeaponManager : Node
         }
         else if (currWeapon.weaponType == Weapon.WeaponType.meele)
         {   
-            if (comboCounter >= currWeapon.animations.attacks.Count)
+            if (progress); //CATCH 
+            else if (cc.isAttacking && !progressCombo)
             {
-                comboCounter = 0;
-                progressCombo = false;
-            }
-
-            if (cc.isAttacking && currWeapon.animations.attacks.Count > comboCounter && !progressCombo)
-            {
+                if (comboCounter >= currWeapon.animations.attacks.Count)
+                {
+                    return;
+                } 
+                comboCounter++;
                 progressCombo = true;
                 return;
             }
+            else if (cc.isAttacking && progressCombo)
+            {
+                return;
+            } 
+            else if (cc.isRecovering)
+            {
+                /*if (comboCounter >= currWeapon.animations.attacks.Count) return;
+                comboCounter++;
+                cc.isRecovering = false;
+                cc.isAttacking = true;*/
+                return;
+            }
 
-            if (cc.isAttacking && !progress) return;
-            
-            GD.Print("Attack");
+            //GD.Print("at");            
             attackAnim.Animation = currWeapon.animations.lib + "/" + currWeapon.animations.attacks[comboCounter];
             cc.ac.at.Set("parameters/MoveState/attack_speed/scale", currWeapon.animations.attackSpeeds[comboCounter]);
 
@@ -290,8 +306,10 @@ public partial class WeaponManager : Node
 
     public void OnAttackStarted()
     {
-        sheet.AddStatModifier(currWeapon.attackSpeedMod, "Speed");
+        cc.isRecovering = false;
         cc.isAttacking = true;
+        sheet.AddStatModifier(currWeapon.attackSpeedMod, "Speed");
+        
     }
 
     public void OnAttackEnded()
@@ -299,8 +317,10 @@ public partial class WeaponManager : Node
         sheet.RemoveStatModifier(currWeapon.attackSpeedMod, "Speed");
         cc.ac.Set("parameters/MoveState/attack_speed/scale", 1);
         cc.isAttacking = false;
+        cc.isRecovering = false;
         progressCombo = false;
         comboCounter = 0;
+        if (IsInstanceValid(hitbox)) hitbox.QueueFree();
     }
     
     Hitbox hitbox;
@@ -311,29 +331,36 @@ public partial class WeaponManager : Node
         hitbox.GlobalPosition = sheet.GetCenterPosition() + cc.forwardDir;
         hitbox.attacker = sheet;
         hitbox.weapon = currWeapon;
-        if (currWeapon.attackData.Count > comboCounter) hitbox.hitInfo = (AttackInfo)currWeapon.attackData[0].Duplicate();
+        if (currWeapon.attackData.Count <= comboCounter) hitbox.hitInfo = (AttackInfo)currWeapon.attackData[0].Duplicate();
         else hitbox.hitInfo = (AttackInfo)currWeapon.attackData[comboCounter].Duplicate();
         hitbox.LookAt(hitbox.GlobalPosition + cc.forwardDir);
     }
 
     public void OnHitEnded()
     {
-        hitbox.QueueFree();
+        if (IsInstanceValid(hitbox)) hitbox.QueueFree();
     }
     
+
     public void OnRecoveryStarted()
     {
         if (comboCounter >= currWeapon.animations.attacks.Count)
         {
             comboCounter = 0;
             progressCombo = false;
+            cc.isAttacking = false;
+            cc.isRecovering = true;
             return;
         }
         if (progressCombo)
         {
-            comboCounter++;
             UseWeapon(true);
             progressCombo = false;
+        }
+        else 
+        {
+            cc.isAttacking = false;
+            cc.isRecovering = true;
         }
     }
 

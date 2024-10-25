@@ -74,4 +74,6 @@ public partial class Weapon : Item
     [Export] public float attackCooldown;
     [Export] public float idealDistanceMAX;
     [Export] public float idealDistanceMIN;
+    //[Export] public bool delayUse;
+    [Export] public float delayUseTime;
 }

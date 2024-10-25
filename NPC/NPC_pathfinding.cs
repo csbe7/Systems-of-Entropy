@@ -13,7 +13,9 @@ public partial class NPC_pathfinding : NavigationAgent3D
     public Node3D targetNode;
     public Vector3 targetPos;
     Vector3 baseDir;
-
+    
+    public uint[] entity_layers = {2};
+    public uint[] static_layers= {1, 5};
     public uint[] world_layers = {1, 2, 5};
 
 

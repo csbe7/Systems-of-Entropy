@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxg62b71k5pvh"]
+[gd_scene load_steps=10 format=3 uid="uid://bxg62b71k5pvh"]
 
 [ext_resource type="PackedScene" uid="uid://cn3uuptsj0lx7" path="res://Weapon System/UI/reload_bar.tscn" id="1_t3ium"]
 
@@ -38,8 +38,20 @@ border_width_bottom = 1
 bg_color = Color(0.313726, 0.831373, 0, 1)
 border_width_left = 1
 border_width_top = 1
+border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvxb7"]
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.686275)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.227451, 0.270588, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lv3gr"]
+bg_color = Color(0.227451, 0.270588, 1, 1)
 
 [node name="NPC_UI_bars" type="Control"]
 layout_mode = 3
@@ -80,6 +92,18 @@ offset_bottom = 79.0
 theme_override_styles/background = SubResource("StyleBoxFlat_lv4xf")
 theme_override_styles/fill = SubResource("StyleBoxFlat_2chkx")
 value = 100.0
+show_percentage = false
+
+[node name="Attack Charge Bar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_top = 81.0
+offset_right = 67.0
+offset_bottom = 91.0
+theme_override_styles/background = SubResource("StyleBoxFlat_cvxb7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lv3gr")
+value = 90.0
 show_percentage = false
 
 [node name="Reload Bar" parent="." instance=ExtResource("1_t3ium")]

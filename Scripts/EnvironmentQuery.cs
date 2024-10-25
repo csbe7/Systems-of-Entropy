@@ -255,13 +255,13 @@ public partial class EnvironmentQuery : Node
 
         }
 
-        MeshInstance3D debugMesh = new MeshInstance3D();
+        /*MeshInstance3D debugMesh = new MeshInstance3D();
         var sphere = new SphereMesh();
         sphere.Radius = 0.125f;
         sphere.Height = 0.25f;
         debugMesh.Mesh = sphere;
         npc.sheet.GetParent().AddChild(debugMesh);
-        debugMesh.GlobalPosition = calcPoint.point;
+        debugMesh.GlobalPosition = calcPoint.point;*/
         
         //GD.Print(maxScore, calcPoint.point);
         return calcPoint;

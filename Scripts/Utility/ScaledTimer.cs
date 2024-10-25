@@ -47,6 +47,7 @@ public partial class ScaledTimer : Node
 
     public void Start(float duration)
     {
+        if (duration < 0) duration = 0;
         time = duration;
         countdown = duration;
         count = true;

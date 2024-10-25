@@ -37,6 +37,7 @@ public partial class CharacterController : Node
     public bool isDashing;
     public bool isStrafing;
     public bool isAttacking;
+    public bool isRecovering;
     public bool isStunned;
 
     public bool canAttack;
@@ -96,10 +97,12 @@ public partial class CharacterController : Node
         float ts = game.Timescale * sheet.localTimescale;
         float D = ts * (float)delta;
 
-        canAttack = !wm.reloading && !isDashing && !isSprinting && !isAttacking;
-        canDrawWeapon = !drawingWeapon && !holsteringWeapon && !isSprinting;
+        canAttack = !wm.reloading && !isDashing && !isSprinting && !isAttacking && !isStunned;
+        canDrawWeapon = !drawingWeapon && !holsteringWeapon && !isSprinting && !isStunned;
         
         if (sprintRecoveryTimer.countdown > 0) sprintRecoveryTimer.SetTimescale(ts);
+        
+        if (isStunned || isAttacking) moveDir = Vector3.Zero;
         Move(ts, D);
         Friction(D);
         
@@ -110,7 +113,9 @@ public partial class CharacterController : Node
     void Move(float timescale, float delta)
     {
         Vector3 velocity = sheet.Velocity;
-        
+
+        if (isRecovering && moveDir != Vector3.Zero) InterruptRecovery();
+
         if (isDashing)
         {
             velocity = sheet.GetStatValue("Dash Speed", true) * dashDir * timescale;
@@ -138,7 +143,8 @@ public partial class CharacterController : Node
     Vector3 CapSpeed(Vector3 speed)
     {
         if (speed.Length() <= sheet.GetStatValue("Speed", true)) return speed;
-        else return speed.Normalized() * sheet.GetStatValue("Speed", true);
+        //else if (isAttacking) return speed; 
+        else return (speed.Normalized() * sheet.GetStatValue("Speed", true));
     }
 
     void Friction(float delta)
@@ -146,7 +152,8 @@ public partial class CharacterController : Node
         if (moveDir == Vector3.Zero) 
         {
             Vector3 velocity = sheet.Velocity;
-            velocity -= velocity.Normalized() * Mathf.Min(velocity.Length(), friction * delta); 
+            if (isAttacking) velocity -= velocity.Normalized() * Mathf.Min(velocity.Length(), (friction/5f) * delta); 
+            else velocity -= velocity.Normalized() * Mathf.Min(velocity.Length(), friction * delta); 
             sheet.Velocity = velocity;
         }
     }
@@ -170,6 +177,8 @@ public partial class CharacterController : Node
         if (isSprinting || wm.reloading) return;
         if (sprintRecoveryTimer.countdown > 0) return;
         if (sheet.GetStatValue("CurrentStamina", false) <= 0) return;
+
+        if (isRecovering) InterruptRecovery();
  
         sheet.AddStatModifier(sheet.sprintSpeedModifier, "Speed");
         sheet.staminaRegenBlockers += 1;
@@ -188,6 +197,7 @@ public partial class CharacterController : Node
     public void StartSneak()
     {
         if (isCrouching) return;
+        if (isRecovering) InterruptRecovery();
         sheet.AddStatModifier(sheet.sneakSpeedModifier, "Speed");
         isCrouching = true;
         ((CapsuleShape3D)GetNode<CollisionShape3D>("%CollisionShape3D").Shape).Height /= 2;
@@ -206,6 +216,8 @@ public partial class CharacterController : Node
         if (isDashing || wm.reloading) return;
         if (IsInstanceValid(dashRecoveryTimer)) return;
         if (sheet.GetStatValue("CurrentStamina", false) < sheet.dashCost) return;
+        
+        if (isRecovering) InterruptRecovery();
 
         sheet.ChangeStamina(-sheet.dashCost);
         
@@ -312,6 +324,24 @@ public partial class CharacterController : Node
     
     public void StartHitStun(AttackInfo attack)
     {
+        isStunned = true;
         ac.StartHitReaction(attack);
+
+        if (isSprinting) EndSprint();
+        sheet.Velocity = Vector3.Zero;
+        if (isRecovering) InterruptRecovery();
+    }
+
+    public void EndHitStun()
+    {
+        if (!isStunned) return;
+        isStunned = false;
+    }
+
+    public void InterruptRecovery()
+    {
+        if (!isRecovering) return;
+        isRecovering = false;
+        ac.AbortAttack(1);
     }
 }

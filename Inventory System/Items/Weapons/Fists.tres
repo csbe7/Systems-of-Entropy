@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=12 format=3 uid="uid://dudxuu3d86v7x"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=16 format=3 uid="uid://dudxuu3d86v7x"]
 
 [ext_resource type="Script" path="res://Inventory System/Item Types/Weapon.cs" id="1_5yplt"]
 [ext_resource type="Resource" uid="uid://cjiw0gkhl4606" path="res://Weapon System/Weapon Animations/fist_animations.tres" id="1_im5si"]
@@ -12,11 +12,39 @@ point_count = 3
 
 [sub_resource type="Resource" id="Resource_5ay2c"]
 script = ExtResource("1_mqrmx")
-damage = 20.0
+damage = 5.0
 knockback = 2.0
-knockbackDir = Vector3(-0.3, 0, 0.7)
-hitstunDuration = 0.3
+knockbackDir = Vector3(0, 0, 1)
+hitstunDuration = 0.6
 hitReactionCurve = SubResource("Curve_x4tvc")
+attackType = 0
+damageType = 0
+
+[sub_resource type="Curve" id="Curve_ymy31"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_c2b8g"]
+script = ExtResource("1_mqrmx")
+damage = 10.0
+knockback = 2.0
+knockbackDir = Vector3(0, 0, 1)
+hitstunDuration = 0.6
+hitReactionCurve = SubResource("Curve_ymy31")
+attackType = 0
+damageType = 0
+
+[sub_resource type="Curve" id="Curve_q2x42"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_fv5ek"]
+script = ExtResource("1_mqrmx")
+damage = 15.0
+knockback = 3.0
+knockbackDir = Vector3(0, 0, 1)
+hitstunDuration = 0.8
+hitReactionCurve = SubResource("Curve_q2x42")
 attackType = 0
 damageType = 0
 
@@ -35,8 +63,8 @@ value = -100.0
 mode = 2
 order = 1000
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_vkhrb"]
-radius = 1.0
+[sub_resource type="BoxShape3D" id="BoxShape3D_3mqxy"]
+size = Vector3(1, 1, 1.5)
 
 [sub_resource type="Resource" id="Resource_2e8re"]
 script = ExtResource("3_xafy3")
@@ -48,7 +76,7 @@ order = 0
 script = ExtResource("1_5yplt")
 weaponType = 0
 attackInfo = SubResource("Resource_531ra")
-attackData = [SubResource("Resource_5ay2c")]
+attackData = [SubResource("Resource_5ay2c"), SubResource("Resource_c2b8g"), SubResource("Resource_fv5ek")]
 attackSpeedMod = SubResource("Resource_s0xsb")
 strafeSpeedMod = SubResource("Resource_2e8re")
 hold = false
@@ -61,7 +89,7 @@ drawTime = 0.0
 range = 0.0
 projectileSpeed = 0.0
 hitbox = ExtResource("2_vq0xo")
-hitboxShape = SubResource("SphereShape3D_vkhrb")
+hitboxShape = SubResource("BoxShape3D_3mqxy")
 hitboxDisplacement = Vector3(0, 1, -1)
 animations = ExtResource("1_im5si")
 rotation = Vector3(0, 0, 0)
@@ -82,6 +110,7 @@ attackCombo = 0
 attackCooldown = 0.0
 idealDistanceMAX = 0.0
 idealDistanceMIN = 0.0
+delayUseTime = 0.0
 name = "Fists"
 description = ""
 type = 3

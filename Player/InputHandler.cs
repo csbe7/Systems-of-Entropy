@@ -109,8 +109,8 @@ public partial class InputHandler : Node
             cc.wm.StartReload();
         }
 
-        
-        if (Input.IsActionJustPressed("Attack") && cc.holdingWeapon && !cc.wm.reloading && !cc.isSprinting && !cc.isDashing)
+
+        if ((Input.IsActionJustPressed("Attack") || (Input.IsActionPressed("Attack") && cc.wm.currWeapon.hold)) && cc.holdingWeapon && !cc.wm.reloading && !cc.isSprinting && !cc.isDashing)
         {
             cc.wm.UseWeapon();
         }

@@ -26,7 +26,7 @@ public partial class CharacterSheet : CharacterBody3D
     [Export] float health = 100;
     [Export] float stamina = 100;
     [Export] float staminaRegen = 5;
-    [Export] float speed = 5;
+    [Export] public float speed = 5;
     [Export] float dashSpeed = 15;
     [Export] public float dashTime = 0.1f;
 
@@ -130,8 +130,8 @@ public partial class CharacterSheet : CharacterBody3D
 
     public void TakeAttack(AttackInfo attack)
     {
-        EmitSignal(SignalName.Attacked, attack);
         ChangeHealth(-attack.damage);
+        EmitSignal(SignalName.Attacked, attack);
     }
 
     public void ChangeHealth(float amount)
