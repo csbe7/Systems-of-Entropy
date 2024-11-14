@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=15 format=3 uid="uid://dl6ykc7s570w2"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=20 format=3 uid="uid://dl6ykc7s570w2"]
 
 [ext_resource type="ArrayMesh" uid="uid://bje8b15nmali1" path="res://Models/Weapons/Meshes/remmignton.tres" id="1_d334v"]
 [ext_resource type="Resource" uid="uid://dw5gmmykinq12" path="res://Weapon System/Weapon Animations/rifle_animations.tres" id="1_g7gcr"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" path="res://Scripts/RPG System/AttackInfo.cs" id="2_pp2yi"]
 [ext_resource type="Script" path="res://Inventory System/Item Types/Weapon.cs" id="3_g3dni"]
 [ext_resource type="PackedScene" uid="uid://5bsloyfedek8" path="res://Prefabs/Projectiles/bullet_projectile.tscn" id="4_yp6js"]
+[ext_resource type="Script" path="res://Weapon System/Weapon Sounds/WeaponSound.cs" id="7_56w45"]
+[ext_resource type="AudioStream" uid="uid://bcfcxeivsn10q" path="res://Audio/SFX/Weapon SFX/gunshot_1.mp3" id="8_38dlm"]
+[ext_resource type="Script" path="res://Audio/Sound System/Sound.cs" id="8_38r5a"]
 
 [sub_resource type="Curve" id="Curve_43el2"]
 _data = [Vector2(0, 0), 0.0, 5.0, 0, 0, Vector2(0.35, 1), 0.0, -1.0, 0, 0, Vector2(1, 0), -1.0, 0.0, 0, 0]
@@ -57,6 +60,17 @@ value = -30.0
 mode = 1
 order = 0
 
+[sub_resource type="Resource" id="Resource_6eyjj"]
+script = ExtResource("8_38r5a")
+stream = ExtResource("8_38dlm")
+volumeDb = 0.0
+maxHearingDistance = 20.0
+priority = 10
+
+[sub_resource type="Resource" id="Resource_ykmjp"]
+script = ExtResource("7_56w45")
+sound = [SubResource("Resource_6eyjj")]
+
 [resource]
 resource_local_to_scene = true
 script = ExtResource("3_g3dni")
@@ -87,6 +101,7 @@ holsteredPosition = Vector3(-0.100161, 0.226236, -0.152801)
 triggerPosition = Vector3(0, 0, 0)
 triggerRotation = Vector3(0, 0, 0)
 scale = Vector3(1.6, 1.5, 1.5)
+weaponSound = SubResource("Resource_ykmjp")
 leftArm_target_rotation = Vector3(0.186251, -0.351917, 0.623968)
 leftArm_target_position = Vector3(-0.104312, -0.0455531, 0.00342834)
 useLeftArmIK = false

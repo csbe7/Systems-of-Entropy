@@ -19,7 +19,7 @@ public partial class Projectile_bullet : Projectile
         AddChild(t);
         t.Start(duration); 
         t.destroyOnTimeout = true;
-        t.Timeout += QueueFree;
+        t.Timeout += QueueFree;        
     }
 
     public override void _Process(double delta)
@@ -28,14 +28,15 @@ public partial class Projectile_bullet : Projectile
         GlobalPosition += direction * speed * Delta;
     }
 
-    private void OnBodyEntered(Node3D body)
+    void OnBodyEntered(Node3D body)
     {
         if (body == shooter)
         {
             return;
         }
-  
-        //CharacterStatus cs = body.GetNodeOrNull<CharacterStatus>("%CharacterStatus");
+        
+        QueueFree();
+
         if (body is CharacterSheet sheet)
         {
             AttackInfo attack = (AttackInfo)weapon.attackInfo.Duplicate();
@@ -45,7 +46,6 @@ public partial class Projectile_bullet : Projectile
             sheet.TakeAttack(attack);
             //shooter.wm.OnWeaponHit(cs);
         }
-        QueueFree();
     }
 
 }

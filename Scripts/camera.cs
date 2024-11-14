@@ -5,6 +5,7 @@ public partial class camera : Node3D
 {
     Camera3D cam;
 	[Export] Node3D center;
+    [Export] float rotationSpeed = 10;
 
     public override void _Ready()
     {
@@ -15,6 +16,9 @@ public partial class camera : Node3D
     public override void _PhysicsProcess(double delta)
     {
         GlobalPosition = center.GlobalPosition;
+
+        if (Input.IsActionJustReleased("ScrollUp")) RotateY(rotationSpeed * (float)delta);
+        else if (Input.IsActionJustReleased("ScrollDown")) RotateY(-rotationSpeed * (float)delta);
     }
 
     public Godot.Collections.Dictionary ShootRayToMouse(uint collisionMask)

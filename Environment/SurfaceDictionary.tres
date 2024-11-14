@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="SurfaceCollection" load_steps=7 format=3 uid="uid://bbx5clde8rp17"]
+
+[ext_resource type="Script" path="res://Environment/SurfaceCollection.cs" id="1_1xj0l"]
+[ext_resource type="Script" path="res://Environment/SurfaceData.cs" id="1_b0cym"]
+[ext_resource type="Script" path="res://Audio/Sound System/Sound.cs" id="2_kci5m"]
+[ext_resource type="AudioStream" uid="uid://cpldvusbsd5qi" path="res://Audio/SFX/Step SFX/dirt_step.mp3" id="2_sa6ac"]
+
+[sub_resource type="Resource" id="Resource_q6vs4"]
+script = ExtResource("2_kci5m")
+stream = ExtResource("2_sa6ac")
+volumeDb = 10.0
+maxHearingDistance = 6.5
+priority = 1
+
+[sub_resource type="Resource" id="Resource_h88h3"]
+script = ExtResource("1_b0cym")
+stepSound = SubResource("Resource_q6vs4")
+pitchScale = 1.0
+volumeMultipler = 1.0
+soundDampening = 1000.0
+
+[resource]
+script = ExtResource("1_1xj0l")
+dictionary = {
+"Dirt": SubResource("Resource_h88h3")
+}

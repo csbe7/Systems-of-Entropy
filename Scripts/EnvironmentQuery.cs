@@ -62,6 +62,7 @@ public partial class EnvironmentQuery : Node
                     {
                         EnvironmentPoint point = new EnvironmentPoint(raycast.GetCollisionPoint());
                         grid.points.Add(point);
+                        //Game.DebugSphere(point.point, raycast);
                     }
                 }
             }
@@ -142,7 +143,6 @@ public partial class EnvironmentQuery : Node
             j++;
         
         }*/
-        GD.Print(grid.points.Count);
     }
 
     
@@ -160,8 +160,6 @@ public partial class EnvironmentQuery : Node
         var wait_signal = npc.sheet.ToSignal(npc.sheet.GetTree(), SceneTree.SignalName.ProcessFrame);
 
         Vector3 oldPos = npc.pf.TargetPosition;
-        int p = 0;
-        int threshold = 10;
 
         foreach(EnvironmentPoint point in grid.points)
         {
@@ -195,11 +193,10 @@ public partial class EnvironmentQuery : Node
                 npc.pf.TargetPosition = oldPos;
                 await wait_signal;
             }*/
-            
         }
         npc.pf.TargetPosition = oldPos;
 
-        /*MeshInstance3D debugMesh = new MeshInstance3D();
+        MeshInstance3D debugMesh = new MeshInstance3D();
         var sphere = new SphereMesh();
         sphere.Radius = 0.125f;
         sphere.Height = 0.25f;
@@ -207,7 +204,6 @@ public partial class EnvironmentQuery : Node
         npc.sheet.GetParent().AddChild(debugMesh);
         debugMesh.GlobalPosition = calcPoint.point;
         
-        GD.Print(maxScore, calcPoint.point);*/
         return calcPoint;
 
     }
@@ -263,7 +259,6 @@ public partial class EnvironmentQuery : Node
         npc.sheet.GetParent().AddChild(debugMesh);
         debugMesh.GlobalPosition = calcPoint.point;*/
         
-        //GD.Print(maxScore, calcPoint.point);
         return calcPoint;
     }
 

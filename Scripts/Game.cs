@@ -6,6 +6,8 @@ using System;
 public partial class Game : Node
 {
     public static uint[] world_layers = {1, 2, 5};
+    public static uint[] inanimate_layers = {1, 5};
+    public static uint[] entity_layers = {2};
 
     public enum GameState
     {
@@ -35,6 +37,8 @@ public partial class Game : Node
     {
         lastTimescale = Timescale;
         Timescale = newTS;
+
+        AudioServer.PlaybackSpeedScale = (float)Mathf.Clamp(Timescale, 0.0001, 100);
         
         EmitSignal(SignalName.TimescaleChanged, lastTimescale, Timescale);
     }
@@ -168,6 +172,17 @@ public partial class Game : Node
         result = (c - b).Normalized();
 
         return 1; 
+    }
+
+    public static void DebugSphere(Vector3 pos, Node3D world_node)
+    {
+        MeshInstance3D debugMesh = new MeshInstance3D();
+        var sphere = new SphereMesh();
+        sphere.Radius = 0.125f;
+        sphere.Height = 0.25f;
+        debugMesh.Mesh = sphere; 
+        world_node.GetTree().Root.GetChild<Node3D>(world_node.GetTree().Root.GetChildCount()-1).AddChild(debugMesh);
+        debugMesh.GlobalPosition = pos;
     }
     
 }

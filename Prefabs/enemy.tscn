@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://di8a7m2ap1fxh"]
+[gd_scene load_steps=88 format=3 uid="uid://di8a7m2ap1fxh"]
 
 [ext_resource type="Script" path="res://NPC/CharacterSheet.cs" id="1_p5mae"]
 [ext_resource type="Script" path="res://Player/CharacterController.cs" id="1_s01ap"]
@@ -12,7 +12,9 @@
 [ext_resource type="Script" path="res://Inventory System/Inventory/Inventory.cs" id="5_5nd7o"]
 [ext_resource type="Resource" uid="uid://cionnbk2veef0" path="res://Scripts/RPG System/Status Effects/strafe_modifier.tres" id="5_agt0v"]
 [ext_resource type="Resource" uid="uid://c88oaxmpcqjia" path="res://Inventory System/Items/Ammo/9mm_bullet.tres" id="6_o5ins"]
+[ext_resource type="Script" path="res://Audio/Sound System/Sound.cs" id="7_bnsha"]
 [ext_resource type="Script" path="res://Inventory System/Inventory/SlotData.cs" id="7_yd8ud"]
+[ext_resource type="AudioStream" uid="uid://cpldvusbsd5qi" path="res://Audio/SFX/Step SFX/dirt_step.mp3" id="8_1fb1q"]
 [ext_resource type="Resource" uid="uid://pt3fm0jtxe4b" path="res://NPC/Personalities/tempered.tres" id="8_ni232"]
 [ext_resource type="Resource" uid="uid://d0idws5tqdhh1" path="res://NPC/Move States/Chase.tres" id="8_oayj3"]
 [ext_resource type="Resource" uid="uid://dl6ykc7s570w2" path="res://Inventory System/Items/Weapons/Remmington.tres" id="8_qr3x1"]
@@ -27,6 +29,14 @@
 [ext_resource type="Resource" uid="uid://dudxuu3d86v7x" path="res://Inventory System/Items/Weapons/Fists.tres" id="18_nsotc"]
 [ext_resource type="PackedScene" uid="uid://b1gbdcdmjmr82" path="res://Prefabs/Body Parts/xbot_joints.tscn" id="25_iwcdj"]
 [ext_resource type="PackedScene" uid="uid://b2lxrjg3kd4g6" path="res://Prefabs/Body Parts/xbot_surface.tscn" id="26_kg0co"]
+[ext_resource type="Script" path="res://Audio/Sound System/SoundEmitter.cs" id="28_wwkdi"]
+
+[sub_resource type="Resource" id="Resource_mn3j0"]
+script = ExtResource("7_bnsha")
+stream = ExtResource("8_1fb1q")
+volumeDb = 10.0
+maxHearingDistance = 10.0
+priority = 1
 
 [sub_resource type="Resource" id="Resource_cyqws"]
 script = ExtResource("11_hlsbm")
@@ -38,7 +48,7 @@ order = 0
 radius = 0.1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_r4nua"]
-radius = 0.25
+radius = 0.3
 height = 1.8
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_k8k4q"]
@@ -71,6 +81,302 @@ items = [SubResource("Resource_tvnsl"), SubResource("Resource_ybvrd")]
 height = 5.0
 radius = 12.0
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_y4y52"]
+resource_local_to_scene = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_tl5v7"]
+resource_local_to_scene = true
+filters = ["%GeneralSkeleton:Chest", "%GeneralSkeleton:Head", "%GeneralSkeleton:Hips", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:LeftUpperArm", "%GeneralSkeleton:Neck", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Spine", "%GeneralSkeleton:UpperChest", "%GeneralSkeleton:mixamorig_HeadTop_End", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1", "."]
+sync = true
+fadein_time = 0.1
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0nt05"]
+resource_local_to_scene = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_oshkv"]
+resource_local_to_scene = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_toykm"]
+resource_local_to_scene = true
+animation = &"rifle_animations/draw_rifle"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_yswud"]
+resource_local_to_scene = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_mlwk4"]
+resource_local_to_scene = true
+filter_enabled = true
+filters = ["%GeneralSkeleton:Head", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:LeftUpperArm", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Root", "%GeneralSkeleton:mixamorig_HeadTop_End", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_LeftHandThumb4", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1", "%GeneralSkeleton:mixamorig_RightHandThumb4", "."]
+fadein_time = 0.1
+fadeout_time = 0.01
+break_loop_at_end = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_741m6"]
+animation = &"rifle_animations/rifle_crouching_walk_forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yf6qt"]
+animation = &"rifle_animations/rifle_crouching_walk_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v3p0r"]
+animation = &"rifle_animations/rifle_crouching_walk_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d1hrt"]
+animation = &"rifle_animations/rifle_crouching_walk_backward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fsv3e"]
+animation = &"rifle_animations/rifle_crouching_walk_forward_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7ik8t"]
+animation = &"rifle_animations/rifle_crouching_walk_forward_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4l34f"]
+animation = &"rifle_animations/rifle_crouching_walk_backward_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h6eud"]
+animation = &"rifle_animations/rifle_crouching_walk_backward_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_23oor"]
+animation = &"rifle_animations/rifle_crouching_idle"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_l07mg"]
+resource_local_to_scene = true
+blend_point_0/node = SubResource("AnimationNodeAnimation_741m6")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_yf6qt")
+blend_point_1/pos = Vector2(-1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_v3p0r")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_d1hrt")
+blend_point_3/pos = Vector2(0, -1)
+blend_point_4/node = SubResource("AnimationNodeAnimation_fsv3e")
+blend_point_4/pos = Vector2(-0.7, 0.7)
+blend_point_5/node = SubResource("AnimationNodeAnimation_7ik8t")
+blend_point_5/pos = Vector2(0.7, 0.7)
+blend_point_6/node = SubResource("AnimationNodeAnimation_4l34f")
+blend_point_6/pos = Vector2(-0.7, -0.7)
+blend_point_7/node = SubResource("AnimationNodeAnimation_h6eud")
+blend_point_7/pos = Vector2(0.7, -0.7)
+blend_point_8/node = SubResource("AnimationNodeAnimation_23oor")
+blend_point_8/pos = Vector2(0, 0)
+snap = Vector2(1, 1)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6uhwg"]
+animation = &"rifle_animations/rifle_walk_forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i6lk4"]
+animation = &"rifle_animations/rifle_walk_backward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5rquy"]
+animation = &"rifle_animations/rifle_walk_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nqxsa"]
+animation = &"rifle_animations/rifle_walk_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yqapc"]
+animation = &"rifle_animations/rifle_walk_forward_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bhs4m"]
+animation = &"rifle_animations/rifle_walk_forward_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r0qm8"]
+animation = &"rifle_animations/rifle_walk_backward_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hqeec"]
+animation = &"rifle_animations/rifle_walk_backward_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yfayu"]
+animation = &"rifle_animations/rifle_standing_idle"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_okukg"]
+resource_local_to_scene = true
+blend_point_0/node = SubResource("AnimationNodeAnimation_6uhwg")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_i6lk4")
+blend_point_1/pos = Vector2(0, -1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_5rquy")
+blend_point_2/pos = Vector2(-1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_nqxsa")
+blend_point_3/pos = Vector2(1, 0)
+blend_point_4/node = SubResource("AnimationNodeAnimation_yqapc")
+blend_point_4/pos = Vector2(-0.7, 0.7)
+blend_point_5/node = SubResource("AnimationNodeAnimation_bhs4m")
+blend_point_5/pos = Vector2(0.7, 0.7)
+blend_point_6/node = SubResource("AnimationNodeAnimation_r0qm8")
+blend_point_6/pos = Vector2(0.7, -0.7)
+blend_point_7/node = SubResource("AnimationNodeAnimation_hqeec")
+blend_point_7/pos = Vector2(-0.7, -0.7)
+blend_point_8/node = SubResource("AnimationNodeAnimation_yfayu")
+blend_point_8/pos = Vector2(0, 0)
+snap = Vector2(1, 1)
+sync = true
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_qqpp2"]
+resource_local_to_scene = true
+filter_enabled = true
+filters = ["%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tt83a"]
+resource_local_to_scene = true
+animation = &"rifle_animations/rifle_standing_idle"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_0uiww"]
+resource_local_to_scene = true
+sync = true
+xfade_time = 0.7
+input_0/name = "no_weapon"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "has_weapon"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ftiac"]
+resource_local_to_scene = true
+xfade_time = 0.1
+input_0/name = "not_crouching"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "is_crouching"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_y3a2w"]
+resource_local_to_scene = true
+xfade_time = 0.1
+input_0/name = "not_crouching"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "is_crouching"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_cuqfj"]
+resource_local_to_scene = true
+xfade_time = 0.2
+input_0/name = "not_sprinting"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "is_sprinting"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r7yq7"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ywwsa"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2opdq"]
+animation = &"sprint"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_bkuvs"]
+resource_local_to_scene = true
+blend_point_0/node = SubResource("AnimationNodeAnimation_r7yq7")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_ywwsa")
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_2opdq")
+blend_point_2/pos = 2.0
+min_space = 0.0
+max_space = 2.0
+snap = 1.0
+sync = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ih0rx"]
+animation = &"crouched_walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2vf4m"]
+animation = &"crouch_idle"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_0iyur"]
+resource_local_to_scene = true
+blend_point_0/node = SubResource("AnimationNodeAnimation_ih0rx")
+blend_point_0/pos = 1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_2vf4m")
+blend_point_1/pos = 0.0
+min_space = 0.0
+max_space = 2.0
+snap = 1.0
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_g5r8r"]
+resource_local_to_scene = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_s25hy"]
+resource_local_to_scene = true
+animation = &"rifle_animations/rifle_sprint"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_y5tob"]
+resource_local_to_scene = true
+graph_offset = Vector2(223.576, 5.23141)
+nodes/animationTimescale/node = SubResource("AnimationNodeTimeScale_y4y52")
+nodes/animationTimescale/position = Vector2(1360, 60)
+nodes/attack/node = SubResource("AnimationNodeOneShot_tl5v7")
+nodes/attack/position = Vector2(1140, 80)
+nodes/attack_anim/node = SubResource("AnimationNodeAnimation_0nt05")
+nodes/attack_anim/position = Vector2(780, 400)
+nodes/attack_speed/node = SubResource("AnimationNodeTimeScale_oshkv")
+nodes/attack_speed/position = Vector2(960, 300)
+nodes/draw_anim/node = SubResource("AnimationNodeAnimation_toykm")
+nodes/draw_anim/position = Vector2(260, 440)
+nodes/draw_speed/node = SubResource("AnimationNodeTimeScale_yswud")
+nodes/draw_speed/position = Vector2(540, 340)
+nodes/draw_weapon/node = SubResource("AnimationNodeOneShot_mlwk4")
+nodes/draw_weapon/position = Vector2(720, 100)
+nodes/gunCrouchBlend/node = SubResource("AnimationNodeBlendSpace2D_l07mg")
+nodes/gunCrouchBlend/position = Vector2(-940, 480)
+nodes/gunIdleBlend/node = SubResource("AnimationNodeBlendSpace2D_okukg")
+nodes/gunIdleBlend/position = Vector2(-1200, 180)
+nodes/hand_blend/node = SubResource("AnimationNodeBlend2_qqpp2")
+nodes/hand_blend/position = Vector2(200, 160)
+nodes/hand_pose/node = SubResource("AnimationNodeAnimation_tt83a")
+nodes/hand_pose/position = Vector2(-140, 360)
+nodes/hasWeapon/node = SubResource("AnimationNodeTransition_0uiww")
+nodes/hasWeapon/position = Vector2(-20, 140)
+nodes/isCrouchingGun/node = SubResource("AnimationNodeTransition_ftiac")
+nodes/isCrouchingGun/position = Vector2(-480, 260)
+nodes/isCrouchingUnarmed/node = SubResource("AnimationNodeTransition_y3a2w")
+nodes/isCrouchingUnarmed/position = Vector2(-260, 0)
+nodes/isSprintingWeapon/node = SubResource("AnimationNodeTransition_cuqfj")
+nodes/isSprintingWeapon/position = Vector2(-940, 220)
+nodes/movementBlend/node = SubResource("AnimationNodeBlendSpace1D_bkuvs")
+nodes/movementBlend/position = Vector2(-620, -60)
+nodes/movementBlendCrouch/node = SubResource("AnimationNodeBlendSpace1D_0iyur")
+nodes/movementBlendCrouch/position = Vector2(-660, 100)
+nodes/movementTimescale/node = SubResource("AnimationNodeTimeScale_g5r8r")
+nodes/movementTimescale/position = Vector2(420, 140)
+nodes/output/position = Vector2(1620, 100)
+nodes/weapon_sprint/node = SubResource("AnimationNodeAnimation_s25hy")
+nodes/weapon_sprint/position = Vector2(-1260, 380)
+node_connections = [&"animationTimescale", 0, &"attack", &"attack", 0, &"draw_weapon", &"attack", 1, &"attack_speed", &"attack_speed", 0, &"attack_anim", &"draw_speed", 0, &"draw_anim", &"draw_weapon", 0, &"movementTimescale", &"draw_weapon", 1, &"draw_speed", &"hand_blend", 0, &"hasWeapon", &"hand_blend", 1, &"hand_pose", &"hasWeapon", 0, &"isCrouchingUnarmed", &"hasWeapon", 1, &"isCrouchingGun", &"isCrouchingGun", 0, &"isSprintingWeapon", &"isCrouchingGun", 1, &"gunCrouchBlend", &"isCrouchingUnarmed", 0, &"movementBlend", &"isCrouchingUnarmed", 1, &"movementBlendCrouch", &"isSprintingWeapon", 0, &"gunIdleBlend", &"isSprintingWeapon", 1, &"weapon_sprint", &"movementTimescale", 0, &"hand_blend", &"output", 0, &"animationTimescale"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ludus"]
+resource_local_to_scene = true
+animation = &"tpose"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6kjjh"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tu158"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_pa56p"]
+resource_local_to_scene = true
+states/MoveState/node = SubResource("AnimationNodeBlendTree_y5tob")
+states/MoveState/position = Vector2(462, 100)
+states/T-pose/node = SubResource("AnimationNodeAnimation_ludus")
+states/T-pose/position = Vector2(306, 100)
+transitions = ["Start", "T-pose", SubResource("AnimationNodeStateMachineTransition_6kjjh"), "T-pose", "MoveState", SubResource("AnimationNodeStateMachineTransition_tu158")]
+graph_offset = Vector2(-98, -76)
+
 [node name="Enemy" type="CharacterBody3D" groups=["NPC"]]
 unique_name_in_owner = true
 collision_layer = 6
@@ -88,12 +394,14 @@ sprintStamPerSec = 10.0
 [node name="CharacterController" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_s01ap")
+debug = "MIAO"
+stepSound = SubResource("Resource_mn3j0")
+baseStepTime = 0.4
 
-[node name="NPC AI" type="Node" parent="." node_paths=PackedStringArray("sheet", "cc", "inventory", "wm", "pf")]
+[node name="NPC AI" type="Node" parent="." node_paths=PackedStringArray("cc", "inventory", "wm", "pf", "sheet")]
 unique_name_in_owner = true
 script = ExtResource("10_jty3w")
 personality = ExtResource("8_ni232")
-sheet = NodePath("..")
 cc = NodePath("../CharacterController")
 inventory = NodePath("../Inventory")
 wm = NodePath("../WeaponManager")
@@ -105,11 +413,14 @@ strafeState = ExtResource("9_glt8h")
 fleeState = ExtResource("10_rqh6l")
 strafeSpeedMod = SubResource("Resource_cyqws")
 tickrate = 0.5
+sheet = NodePath("..")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." node_paths=PackedStringArray("cc")]
 unique_name_in_owner = true
-path_desired_distance = 5.0
+path_desired_distance = 0.5
 path_height_offset = 0.5
+path_max_distance = 10.01
+avoidance_enabled = true
 height = 2.0
 debug_use_custom = true
 debug_path_custom_color = Color(0.831373, 0, 0, 1)
@@ -118,8 +429,7 @@ cc = NodePath("../CharacterController")
 baseTargetDistance = 0.5
 followDistance = 2.0
 followWaitDistance = 1.0
-maxRays = 16
-rayOffset = Vector3(0, 0.5, 0)
+directionResolution = 32
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 unique_name_in_owner = true
@@ -190,3 +500,19 @@ script = ExtResource("10_vo4de")
 [node name="HumanoidMesh" parent="Mesh" instance=ExtResource("15_bqvij")]
 Joints = ExtResource("25_iwcdj")
 Surface = ExtResource("26_kg0co")
+
+[node name="WeaponStreamPlayer" parent="Mesh/HumanoidMesh/GeneralSkeleton/weaponAttachment" index="1" node_paths=PackedStringArray("owner")]
+owner = NodePath("../../../../..")
+
+[node name="AnimationTree" parent="Mesh/HumanoidMesh" index="5"]
+tree_root = SubResource("AnimationNodeStateMachine_pa56p")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." node_paths=PackedStringArray("owner")]
+unique_name_in_owner = true
+visible = false
+max_polyphony = 10
+bus = &"SFX"
+script = ExtResource("28_wwkdi")
+owner = NodePath("..")
+
+[editable path="Mesh/HumanoidMesh"]

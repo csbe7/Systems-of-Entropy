@@ -58,6 +58,9 @@ public partial class Weapon : Item
     [Export] public Vector3 triggerRotation;
     [Export] public Vector3 scale;
 
+    [ExportCategory("Audio Settings")]
+    [Export] public WeaponSound weaponSound;
+
     [ExportCategory("IK")]
     [Export] public Vector3 leftArm_target_rotation;
     [Export] public Vector3 leftArm_target_position;

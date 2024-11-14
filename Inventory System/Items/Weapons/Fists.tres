@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=16 format=3 uid="uid://dudxuu3d86v7x"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=18 format=3 uid="uid://dudxuu3d86v7x"]
 
 [ext_resource type="Script" path="res://Inventory System/Item Types/Weapon.cs" id="1_5yplt"]
 [ext_resource type="Resource" uid="uid://cjiw0gkhl4606" path="res://Weapon System/Weapon Animations/fist_animations.tres" id="1_im5si"]
 [ext_resource type="Script" path="res://Scripts/RPG System/AttackInfo.cs" id="1_mqrmx"]
 [ext_resource type="PackedScene" uid="uid://dd3tvcy1qk677" path="res://Prefabs/Hitbox/hitbox.tscn" id="2_vq0xo"]
 [ext_resource type="Script" path="res://Scripts/RPG System/Stat/StatModifier.cs" id="3_xafy3"]
+[ext_resource type="Script" path="res://Weapon System/Weapon Sounds/WeaponSound.cs" id="6_vs6kk"]
 
 [sub_resource type="Curve" id="Curve_x4tvc"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -12,7 +13,7 @@ point_count = 3
 
 [sub_resource type="Resource" id="Resource_5ay2c"]
 script = ExtResource("1_mqrmx")
-damage = 5.0
+damage = 3.0
 knockback = 2.0
 knockbackDir = Vector3(0, 0, 1)
 hitstunDuration = 0.6
@@ -26,7 +27,7 @@ point_count = 3
 
 [sub_resource type="Resource" id="Resource_c2b8g"]
 script = ExtResource("1_mqrmx")
-damage = 10.0
+damage = 5.0
 knockback = 2.0
 knockbackDir = Vector3(0, 0, 1)
 hitstunDuration = 0.6
@@ -40,7 +41,7 @@ point_count = 3
 
 [sub_resource type="Resource" id="Resource_fv5ek"]
 script = ExtResource("1_mqrmx")
-damage = 15.0
+damage = 10.0
 knockback = 3.0
 knockbackDir = Vector3(0, 0, 1)
 hitstunDuration = 0.8
@@ -72,6 +73,10 @@ value = -10.0
 mode = 1
 order = 0
 
+[sub_resource type="Resource" id="Resource_oc5t7"]
+script = ExtResource("6_vs6kk")
+sound = []
+
 [resource]
 script = ExtResource("1_5yplt")
 weaponType = 0
@@ -85,7 +90,7 @@ chargeItemName = ""
 maxCharge = 0
 chargePerAttack = 1
 reloadTime = 0.0
-drawTime = 0.0
+drawTime = 0.2
 range = 0.0
 projectileSpeed = 0.0
 hitbox = ExtResource("2_vq0xo")
@@ -100,6 +105,7 @@ holsteredPosition = Vector3(0, 0, 0)
 triggerPosition = Vector3(0, 0, 0)
 triggerRotation = Vector3(0, 0, 0)
 scale = Vector3(0, 0, 0)
+weaponSound = SubResource("Resource_oc5t7")
 leftArm_target_rotation = Vector3(0, 0, 0)
 leftArm_target_position = Vector3(0, 0, 0)
 useLeftArmIK = false

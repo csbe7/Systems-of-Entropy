@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Runtime.InteropServices;
 
 
 
@@ -7,10 +8,13 @@ public partial class CharacterController : Node
 {
     public Game game;
     
-    
+    [Export] string debug;
     public CharacterSheet sheet;
     public WeaponManager wm;
     public AnimationController ac;
+    public SoundEmitter se;
+
+    public RandomNumberGenerator randomizer = new RandomNumberGenerator();
 
     [ExportCategory("Physics")]
     Vector3 lastVelocity;
@@ -23,9 +27,6 @@ public partial class CharacterController : Node
     [Export] public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle() * 6;
     
     [ExportCategory("State variables")]
-    
-    public HumanoidState stateVars = new HumanoidState();
-
     public Vector3 forwardDir;
     
     public bool onFloor;
@@ -44,6 +45,20 @@ public partial class CharacterController : Node
     public bool canDrawWeapon;
 
     public int moveInputBlockers = 0;
+
+    [ExportCategory("Stealth")]
+    [Export] public float standingVisibilityModifier = 1;
+    [Export] public float crouchingVisibilityModifier = 0.8f;
+    [Export] public float stillVisibilityModifier = 1f;
+    [Export] public float movingVisibilityModifier = 1f;
+
+    [Export] public float crouchSoundReduction = 2;
+    
+    [ExportCategory("Sound")]
+    [Export] Sound stepSound;
+    [Export] public float baseStepTime = 0.1f;
+    public float stepTime;
+    ScaledTimer stepTimer = new ScaledTimer();
 
     ScaledTimer sprintRecoveryTimer;
     ScaledTimer dashRecoveryTimer;
@@ -71,6 +86,7 @@ public partial class CharacterController : Node
         sheet = GetParent<CharacterSheet>();
         ac = GetNode<AnimationController>("%AnimationController");
         wm = GetNode<WeaponManager>("%WeaponManager");
+        se = GetNode<SoundEmitter>("%AudioStreamPlayer3D");
 
         game.TimescaleChanged += OnTimescaleChanged;
 
@@ -81,18 +97,35 @@ public partial class CharacterController : Node
         dashStamBlockTimer.Timeout += EndDashStaminaBlock;
         sheet.AddTimer(dashStamBlockTimer);
 
+        sheet.AddTimer(stepTimer);
+        stepTimer.countdown = -1;
+        stepTime = baseStepTime;
+
+        randomizer.Randomize();
+
         sheet.Attacked += StartHitStun;
+
+        sheet.GetStat("Speed").ModifierAdded += OnSpeedModified;
+        sheet.GetStat("Speed").ModifierRemoved += OnSpeedModified;
         
         forwardDir = sheet.GlobalBasis.Z;
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        
         if (Input.IsActionJustPressed("Debug"))
         {
             if  (sheet.name == "Player") EnvironmentQuery.MakeGrid(sheet.GlobalPosition, sheet);
         }
+        
+        sheet.visibility = 1;
+        if (sheet.Velocity.Length() <= 0.1f) sheet.visibility *= stillVisibilityModifier;
+        else sheet.visibility *= movingVisibilityModifier;
+
+        if (isCrouching) sheet.visibility *= crouchingVisibilityModifier;
+        else sheet.visibility *= standingVisibilityModifier;
+        
+
 
         float ts = game.Timescale * sheet.localTimescale;
         float D = ts * (float)delta;
@@ -100,9 +133,44 @@ public partial class CharacterController : Node
         canAttack = !wm.reloading && !isDashing && !isSprinting && !isAttacking && !isStunned;
         canDrawWeapon = !drawingWeapon && !holsteringWeapon && !isSprinting && !isStunned;
         
-        if (sprintRecoveryTimer.countdown > 0) sprintRecoveryTimer.SetTimescale(ts);
         
+        
+        if (sprintRecoveryTimer.countdown > 0) sprintRecoveryTimer.SetTimescale(ts);
+    
+
         if (isStunned || isAttacking) moveDir = Vector3.Zero;
+        //STEP SOUND
+        var surface = Game.Raycast(sheet, sheet.GlobalPosition, new Vector3(sheet.GlobalPosition.X, sheet.GlobalPosition.Y-1, sheet.GlobalPosition.Z), Game.GetBitMask(Game.inanimate_layers));
+        if (surface.Count > 0) onFloor = true;
+        else onFloor = false;
+        
+        if (sheet.Velocity.Length() > 0.1f && moveDir.Length() > 0.1f && onFloor)
+        {
+            if (stepTimer.countdown <= 0)
+            {
+                SurfaceData sdata = SurfaceManager.GetSurfaceData((string)((Node3D)surface["collider"]).GetMeta("SurfaceName"));
+
+                if (sdata != null)
+                {
+                    randomizer.Randomize();
+                    Sound s = (Sound)sdata.stepSound.Duplicate();
+                    s.volumeDb *= sdata.volumeMultipler; 
+                    if (isCrouching)
+                    {
+                        s.maxHearingDistance /= crouchSoundReduction;
+                        s.volumeDb -= 10;
+                    } 
+                    se.Play(s, randomizer.RandfRange(sdata.pitchScale - 0.2f, sdata.pitchScale + 0.2f), false);
+                    stepTimer.Start(stepTime);
+                }
+
+            }
+        }
+        else
+        {
+            stepTimer.countdown = -1;
+        }
+
         Move(ts, D);
         Friction(D);
         
@@ -275,6 +343,7 @@ public partial class CharacterController : Node
         moveDir = Vector3.Zero;
         drawingWeapon = true;
         holdingWeapon = true;
+        EmitSignal(SignalName.StateChanged);
         ac.DrawWeapon();
     }
     public void EndDrawingWeapon()
@@ -297,6 +366,7 @@ public partial class CharacterController : Node
         moveDir = Vector3.Zero;
         holsteringWeapon = true;
         holdingWeapon = false;
+        EmitSignal(SignalName.StateChanged);
         ac.HolsterWeapon();
     }
     public void EndHolsteringWeapon()
@@ -313,7 +383,6 @@ public partial class CharacterController : Node
     public void StartHoldingWeapon()
     {
         if (holdingWeapon || !canDrawWeapon || isSprinting) return;
-        
         StartDrawingWeapon();
     }
     public void EndHoldingWeapon()
@@ -343,5 +412,22 @@ public partial class CharacterController : Node
         if (!isRecovering) return;
         isRecovering = false;
         ac.AbortAttack(1);
+    }
+
+    void OnSpeedModified(StatModifier mod)
+    {
+        if (mod.mode == StatModifier.Mode.PercentageFromBase)
+        {
+            if (sheet.GetStatValue("Speed") == 0)
+            {
+                stepTimer.count = false;
+                return;
+            }
+            else stepTimer.count = true;
+
+            //stepTimer.countdown -= (stepTimer.countdown/100f)*mod.value;
+            float percent = sheet.GetStatValue("Speed", false)/sheet.GetStatValue("Speed", true);
+            stepTime = baseStepTime * percent;
+        }
     }
 }

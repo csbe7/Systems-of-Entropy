@@ -1,4 +1,4 @@
-[gd_scene load_steps=110 format=3 uid="uid://dlapkiauk1j8w"]
+[gd_scene load_steps=111 format=3 uid="uid://dlapkiauk1j8w"]
 
 [ext_resource type="Script" path="res://MeshSelection.cs" id="1_1wyky"]
 [ext_resource type="PackedScene" uid="uid://i40jmwkpjd68" path="res://Prefabs/weapon.tscn" id="2_jhfuw"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bdqrwkwr8ugcn" path="res://Prefabs/Body Parts/ybot_surface.tscn" id="3_7orp2"]
 [ext_resource type="Animation" uid="uid://co71tdgvl6dcv" path="res://Animations/Humanoid/Unarmed/crouch_idle.res" id="3_lnfnt"]
 [ext_resource type="Animation" uid="uid://bxgk26f8akgk6" path="res://Animations/Humanoid/Unarmed/crouched_walk.res" id="4_f3wvv"]
+[ext_resource type="Script" path="res://Audio/Sound System/SoundEmitter.cs" id="5_2ccbw"]
 [ext_resource type="Animation" uid="uid://dn85r40glognj" path="res://Animations/Humanoid/Unarmed/idle.res" id="5_yk60f"]
 [ext_resource type="Animation" uid="uid://c1266ib077lp6" path="res://Animations/Humanoid/Unarmed/jump.res" id="6_r0ehd"]
 [ext_resource type="Animation" uid="uid://bd5w2lyqpast2" path="res://Animations/Humanoid/Unarmed/rifle_aim.res" id="7_c037c"]
@@ -169,7 +170,7 @@ resource_local_to_scene = true
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_tjabx"]
 resource_local_to_scene = true
 filter_enabled = true
-filters = ["%GeneralSkeleton:Head", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Root", "%GeneralSkeleton:mixamorig_HeadTop_End", "%GeneralSkeleton:mixamorig_LeftHandThumb4", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1", "%GeneralSkeleton:mixamorig_RightHandThumb4", "."]
+filters = ["%GeneralSkeleton:Head", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:LeftUpperArm", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Root", "%GeneralSkeleton:mixamorig_HeadTop_End", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_LeftHandThumb4", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1", "%GeneralSkeleton:mixamorig_RightHandThumb4", "."]
 fadein_time = 0.1
 fadeout_time = 0.01
 break_loop_at_end = true
@@ -378,7 +379,7 @@ animation = &"rifle_animations/rifle_sprint"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_rok64"]
 resource_local_to_scene = true
-graph_offset = Vector2(-259.437, 24.3106)
+graph_offset = Vector2(223.576, 5.23141)
 nodes/animationTimescale/node = SubResource("AnimationNodeTimeScale_yrcgd")
 nodes/animationTimescale/position = Vector2(1360, 60)
 nodes/attack/node = SubResource("AnimationNodeOneShot_48a3n")
@@ -492,7 +493,7 @@ bones/6/name = "mixamorig_HeadTop_End"
 bones/6/parent = 5
 bones/6/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.13542e-08, 0.220374, 0.075011)
 bones/6/enabled = true
-bones/6/position = Vector3(2.13542e-08, 0.220374, 0.075011)
+bones/6/position = Vector3(0, 0.211339, 0.0719355)
 bones/6/rotation = Quaternion(0, 0, 0, 1)
 bones/6/scale = Vector3(1, 1, 1)
 bones/7/name = "RightShoulder"
@@ -904,7 +905,7 @@ bones/64/scale = Vector3(1, 1, 1)
 
 [node name="weaponAttachment" type="BoneAttachment3D" parent="GeneralSkeleton"]
 unique_name_in_owner = true
-transform = Transform3D(-2.98024e-08, -1, 1.19209e-07, 4.56349e-08, -1.19209e-07, -1, 1, -2.98024e-08, 4.56349e-08, -0.713332, 1.39782, -0.0561226)
+transform = Transform3D(-2.98023e-08, -1, 1.19209e-07, -1.33179e-07, -1.19209e-07, -1, 1, -2.98023e-08, -1.33179e-07, -0.713332, 1.39782, -0.0561227)
 bone_name = "RightHand"
 bone_idx = 10
 
@@ -913,6 +914,12 @@ transform = Transform3D(0.495947, 0.245943, 1.40476, -1.51219, -0.080872, 0.4833
 
 [node name="testTarget" type="Node3D" parent="GeneralSkeleton/weaponAttachment/Weapon"]
 transform = Transform3D(0.977402, 0.0937541, -0.189431, -0.0811943, 0.994017, 0.073024, 0.195144, -0.0559941, 0.979173, -0.140669, -0.0628369, -0.00889081)
+
+[node name="WeaponStreamPlayer" type="AudioStreamPlayer3D" parent="GeneralSkeleton/weaponAttachment"]
+unique_name_in_owner = true
+transform = Transform3D(0.309966, 0.163962, 0.936503, -0.945116, -0.0539142, 0.322256, 0.103328, -0.984992, 0.138251, 0.0146269, 0.0902486, 0.0179127)
+visible = false
+script = ExtResource("5_2ccbw")
 
 [node name="right_arm_IK3D" type="SkeletonIK3D" parent="GeneralSkeleton"]
 unique_name_in_owner = true
@@ -937,7 +944,7 @@ target_node = NodePath("../../head_target")
 
 [node name="backAttachment" type="BoneAttachment3D" parent="GeneralSkeleton"]
 unique_name_in_owner = true
-transform = Transform3D(1, -1.73472e-18, -8.07793e-28, 1.73472e-18, 1, 9.31322e-10, -8.07793e-28, -9.31322e-10, 1, 1.02018e-08, 1.20071, 0.00151351)
+transform = Transform3D(1, -1.73472e-18, -8.07794e-28, 1.73472e-18, 1, 9.31323e-10, -8.07794e-28, -9.31323e-10, 1, 1.02017e-08, 1.20071, 0.00151349)
 bone_name = "Chest"
 bone_idx = 2
 
@@ -965,7 +972,7 @@ transform = Transform3D(-0.295527, 0.832104, 0.469326, 0.948478, 0.196802, 0.248
 
 [node name="head_target" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(0.99759, -0.0533386, -0.044387, 0.0347312, 0.937562, -0.346081, 0.0600746, 0.343705, 0.937154, -0.218164, 1.5018, 0.167583)
+transform = Transform3D(0.914234, -0.0340666, -0.403753, 0.11665, 0.976402, 0.18175, 0.388033, -0.21326, 0.896633, -0.0178762, 1.44878, -0.156412)
 
 [node name="IK_targets" type="Node" parent="."]
 unique_name_in_owner = true

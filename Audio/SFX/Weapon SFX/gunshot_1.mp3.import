@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bcfcxeivsn10q"
+path="res://.godot/imported/gunshot_1.mp3-730088b5c5354c9acb26db700ba046dd.mp3str"
+
+[deps]
+
+source_file="res://Audio/SFX/Weapon SFX/gunshot_1.mp3"
+dest_files=["res://.godot/imported/gunshot_1.mp3-730088b5c5354c9acb26db700ba046dd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

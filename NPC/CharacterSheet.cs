@@ -29,6 +29,7 @@ public partial class CharacterSheet : CharacterBody3D
     [Export] public float speed = 5;
     [Export] float dashSpeed = 15;
     [Export] public float dashTime = 0.1f;
+    [Export] public float sightRange = 10;
 
     
     [ExportCategory("State stat modifiers")]
@@ -45,7 +46,9 @@ public partial class CharacterSheet : CharacterBody3D
     [Export] public float dashRecovery = 0.4f;
     [Export] public float dashStaminaRecoveryTime = 0.45f;
 
-
+    public float visibility;
+    public float noise;
+    public float noisePriority;
     public Godot.Collections.Dictionary stats = new Godot.Collections.Dictionary     //STATS
 	{
 		//STATUS STATS
@@ -55,7 +58,6 @@ public partial class CharacterSheet : CharacterBody3D
 		{"CurrentStamina", new Stat (100)},
         {"Tiredness", new Stat(100)},
         {"CurrentTiredness", new Stat(100)},
-        {"Visibility", new Stat(0, 0, 100)},
 
         //MAIN STATS
         //MIND
@@ -81,7 +83,10 @@ public partial class CharacterSheet : CharacterBody3D
         {"Meele Damage", new Stat()},
         {"Stamina Regen", new Stat()},
         {"Dash Speed", new Stat()},
-        {"Dash Recovery", new Stat()}
+        {"Dash Recovery", new Stat()},
+
+        {"Stealth", new Stat()},
+        {"Sight", new Stat()},
 
 		
 	};
@@ -115,6 +120,7 @@ public partial class CharacterSheet : CharacterBody3D
         SetStatValue("Speed", speed, 0);
         SetStatValue("Dash Speed", dashSpeed, 0);
         SetStatValue("Dash Recovery", dashRecovery, 0);
+        SetStatValue("Sight", sightRange, 0);
     }
 
     public override void _Process(double delta)
@@ -194,6 +200,10 @@ public partial class CharacterSheet : CharacterBody3D
     
 
     //STAT MANIPULATION
+    public Stat GetStat(string stat)
+    {
+        return (Stat)stats[stat];
+    }
     public float GetStatValue(string stat, bool mod = true) //true = ModValue  false = BaseValue
 	{
 		float value;
@@ -327,7 +337,24 @@ public partial class CharacterSheet : CharacterBody3D
         AddChild(timer);
     }
 
-
+    
+    public float GetShapeHeight()
+    {
+        Shape3D shape = GetNode<CollisionShape3D>("%CollisionShape3D").Shape;
+        if (shape is CapsuleShape3D capsule)
+        {
+            return capsule.Height;
+        }
+        else if (shape is CylinderShape3D cylinder)
+        {
+            return cylinder.Height;
+        }
+        else if (shape is SphereShape3D sphere)
+        {
+            return sphere.Radius * 2;
+        }
+        return 0;
+    }
     public Vector3 GetCenterPosition(WeaponManager wm = null)
     {
         if (IsInstanceValid(wm) && IsInstanceValid(wm.weaponTip))
@@ -354,6 +381,78 @@ public partial class CharacterSheet : CharacterBody3D
             }
         }
         return GlobalPosition;
+    }
+    
+    
+    public bool HasLineOfSight(Vector3 pos, int headPos = 1)
+    {
+        Vector3 centerPos = GetCenterPosition();
+        float shapeHeight = GetShapeHeight();
+
+        if (headPos == 1) centerPos = new Vector3(centerPos.X, centerPos.Y + shapeHeight/2, centerPos.Z);
+        else if (headPos == 2) centerPos = new Vector3(centerPos.X, centerPos.Y - shapeHeight/2, centerPos.Z);
+        else if (headPos == 3) centerPos = GlobalPosition;
+
+        if (Game.Raycast(this, centerPos, pos, Game.GetBitMask(Game.inanimate_layers)).Count == 0) return true;
+        else return false;
+    }
+    public bool HasLineOfSight(CharacterSheet character, int headPos = 1)
+    {
+        Vector3 centerPos = GetCenterPosition();
+        float shapeHeight = GetShapeHeight();
+
+        Vector3 charCenterPos = character.GetCenterPosition();
+        float charShapeHeight = character.GetShapeHeight();
+        
+        
+        if (headPos == 1) centerPos = new Vector3(centerPos.X, centerPos.Y + shapeHeight/2, centerPos.Z);
+        else if (headPos == 2) centerPos = new Vector3(centerPos.X, centerPos.Y - shapeHeight/2, centerPos.Z);
+        else if (headPos == 3) centerPos = GlobalPosition;
+
+        if (Game.Raycast(this, centerPos, charCenterPos, Game.GetBitMask(Game.inanimate_layers)).Count == 0
+        || Game.Raycast(this, centerPos, new Vector3(charCenterPos.X, charCenterPos.Y + charShapeHeight, charCenterPos.Z), Game.GetBitMask(Game.inanimate_layers)).Count == 0
+        || Game.Raycast(this, centerPos, new Vector3(charCenterPos.X, charCenterPos.Y - charShapeHeight, charCenterPos.Z), Game.GetBitMask(Game.inanimate_layers)).Count == 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CanSee(CharacterSheet character, Vector3 forwardDir, int headPos = 1)
+    {
+        Vector3 centerPos = GetCenterPosition();
+        float shapeHeight = GetShapeHeight();
+
+        Vector3 charCenterPos = character.GetCenterPosition();
+        float charShapeHeight = character.GetShapeHeight();
+        
+        
+        if (headPos == 1) centerPos = new Vector3(centerPos.X, centerPos.Y + shapeHeight/2, centerPos.Z);
+        else if (headPos == 2) centerPos = new Vector3(centerPos.X, centerPos.Y - shapeHeight/2, centerPos.Z);
+        else if (headPos == 3) centerPos = GlobalPosition;
+
+        Vector3 displacement = character.GlobalPosition- centerPos;
+        Vector3 dir = Game.flattenVector(displacement).Normalized();
+        float dot = dir.Dot(Game.flattenVector(forwardDir).Normalized());
+        if (dot < 0.5f) return false;
+        
+        
+
+
+        if (Game.Raycast(this, centerPos, charCenterPos, Game.GetBitMask(Game.inanimate_layers)).Count == 0
+        || Game.Raycast(this, centerPos, new Vector3(charCenterPos.X, charCenterPos.Y + charShapeHeight/2, charCenterPos.Z), Game.GetBitMask(Game.inanimate_layers)).Count == 0
+        || Game.Raycast(this, centerPos, new Vector3(charCenterPos.X, charCenterPos.Y - charShapeHeight/2, charCenterPos.Z), Game.GetBitMask(Game.inanimate_layers)).Count == 0)
+        {
+            var r1 = Game.Raycast(this, centerPos, charCenterPos, Game.GetBitMask(Game.inanimate_layers));
+            var r2 = Game.Raycast(this, centerPos, new Vector3(charCenterPos.X, charCenterPos.Y + charShapeHeight/2, charCenterPos.Z), Game.GetBitMask(Game.inanimate_layers));
+            var r3 = Game.Raycast(this, centerPos, new Vector3(charCenterPos.X, charCenterPos.Y - charShapeHeight/2, charCenterPos.Z), Game.GetBitMask(Game.inanimate_layers));
+
+          
+            if (displacement.Length() <= GetStatValue("Sight") * character.visibility) return true;
+            else return false;
+        }
+        else return false;
     }
 
 }

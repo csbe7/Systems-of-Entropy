@@ -93,7 +93,6 @@ public partial class NPC_UImanager : Node
     {
         if (change < 0)
         {
-            //GD.Print(change);
             hpbar.Value = (sheet.GetStatValue("CurrentHealth", false)/sheet.GetStatValue("Health", true)) * (float)hpbar.MaxValue;
         }
     }

@@ -6,6 +6,7 @@ using System;
 public partial class Stat : Resource
 {
 	[Signal] public delegate void ModifierAddedEventHandler(StatModifier modifier);
+	[Signal] public delegate void ModifierRemovedEventHandler(StatModifier modifier);
 	[Signal] public delegate void ValueChangedEventHandler(float oldVal, float newVal);
 
     [Export] public float minValue, maxValue;
@@ -67,11 +68,7 @@ public partial class Stat : Resource
 	{
 		modifiers.Remove(mod);
         hasBeenModified = true;
-	}
-
-	public void PrintModifierCount()
-	{
-		GD.Print("Modifier Count = " + modifiers.Count);
+		EmitSignal(SignalName.ModifierRemoved, mod);
 	}
 
 	private float Calculate()

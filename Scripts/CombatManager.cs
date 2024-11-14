@@ -63,7 +63,7 @@ public partial class CombatManager : Node
             else if (pathfindingRequests[requester] == CoverRequest)
             {
                 requester.targetPoint = await EnvironmentQuery.FindCover(requester.enemies, requester);
-                //GD.Print(requester.targetPoint.point);
+
             }
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         }

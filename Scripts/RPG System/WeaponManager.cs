@@ -16,6 +16,8 @@ public partial class WeaponManager : Node
     BoneAttachment3D backAttachment;
     SkeletonIK3D leftArmIK;
 
+    SoundEmitter weaponStreamPlayer;
+
     public Node3D weaponTip;
 
     AnimationNodeAnimation attackAnim;
@@ -66,6 +68,9 @@ public partial class WeaponManager : Node
 
         handAttachment = humanoidMesh.GetNode<BoneAttachment3D>("%weaponAttachment");
         backAttachment = humanoidMesh.GetNode<BoneAttachment3D>("%backAttachment");
+
+        weaponStreamPlayer = handAttachment.GetNode<SoundEmitter>("%WeaponStreamPlayer");
+        weaponStreamPlayer.Owner = sheet;
 
         humanoidMesh.AttackStarted += OnAttackStarted;
         humanoidMesh.AttackEnded += OnAttackEnded;
@@ -210,7 +215,6 @@ public partial class WeaponManager : Node
         if (wa.draw != "" && wa.draw != "base") anim.Animation = wa.lib + "/" + wa.draw;
         else anim.Animation = null;
 
-        GD.Print(sheet.name + " weapon loaded");
     }
     
     public void UnloadWeapon()
@@ -261,7 +265,7 @@ public partial class WeaponManager : Node
             proj.weapon = currWeapon;
             proj.distance = currWeapon.range;
             proj.speed = currWeapon.projectileSpeed;
-            AddChild(proj);
+            GetParent().GetParent().AddChild(proj);
             proj.GlobalPosition = weaponTip.GlobalPosition;
 
             cc.ac.AttackFinished += OnAttackFinished;
@@ -295,13 +299,30 @@ public partial class WeaponManager : Node
                 cc.isAttacking = true;*/
                 return;
             }
-
-            //GD.Print("at");            
+          
             attackAnim.Animation = currWeapon.animations.lib + "/" + currWeapon.animations.attacks[comboCounter];
             cc.ac.at.Set("parameters/MoveState/attack_speed/scale", currWeapon.animations.attackSpeeds[comboCounter]);
 
             cc.ac.StartAttack();
         }
+        
+        Sound s = null;
+        if (currWeapon.weaponSound.sound.Count >= comboCounter && currWeapon.weaponSound.sound.Count != 0)
+        {
+            s = (Sound)currWeapon.weaponSound.sound[0].Duplicate();
+            s.emitter = sheet;
+            weaponStreamPlayer.Stream = currWeapon.weaponSound.sound[0].stream;
+            weaponStreamPlayer.VolumeDb = currWeapon.weaponSound.sound[0].volumeDb;
+        }
+        else if (currWeapon.weaponSound.sound.Count != 0)
+        {
+            s = (Sound)currWeapon.weaponSound.sound[comboCounter].Duplicate();
+            s.emitter = sheet;
+            weaponStreamPlayer.Stream = currWeapon.weaponSound.sound[comboCounter].stream;
+            weaponStreamPlayer.VolumeDb = currWeapon.weaponSound.sound[comboCounter].volumeDb;
+        }
+        
+        if (IsInstanceValid(s)) weaponStreamPlayer.Play(s, 1, false);
     }
 
     public void OnAttackStarted()
@@ -372,7 +393,7 @@ public partial class WeaponManager : Node
     
     public void OnWeaponHit(CharacterStatus target)
     {
-        //GD.Print("HIT");
+        
     }
     
 

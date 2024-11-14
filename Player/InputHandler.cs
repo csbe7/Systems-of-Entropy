@@ -10,7 +10,7 @@ public partial class InputHandler : Node
     public override void _Ready()
     {
         cc = GetNode<CharacterController>("%CharacterController");
-        camPivot =  GetTree().Root.GetChild<Node3D>(3).GetNode<camera>("%CameraPivot");
+        camPivot =  GetTree().Root.GetChild<Node3D>(GetTree().Root.GetChildCount()-1).GetNode<camera>("%CameraPivot");
         cam = camPivot.GetNode<Camera3D>("Camera3D");
         //cc = GetNode<CharacterController>("%CharacterBody");
     }
@@ -89,7 +89,6 @@ public partial class InputHandler : Node
         {
             if (Input.IsActionJustPressed("Weapon Switch") && cc.canDrawWeapon)
             {
-                GD.Print("Switch");
                 if (!cc.holdingWeapon) cc.StartHoldingWeapon();
                 else cc.EndHoldingWeapon(); 
                 updateState = true;
@@ -188,7 +187,6 @@ public partial class InputHandler : Node
             if (ray.Count != 0 && (Node3D)ray["collider"] != target)
             {
                 return target.GlobalPosition;
-                //GD.Print("Intercept not viable");
             } 
             return pos;
         }

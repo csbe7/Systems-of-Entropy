@@ -4,7 +4,7 @@ using System.IO;
 
 public partial class FactionManager : Node
 {
-    public Godot.Collections.Array<Faction> Factions = new Godot.Collections.Array<Faction>();
+    public static Godot.Collections.Array<Faction> Factions = new Godot.Collections.Array<Faction>();
 
     public override void _Ready()
     {
@@ -23,7 +23,7 @@ public partial class FactionManager : Node
         }
     }
 
-    public Faction GetFaction(string name)
+    public static Faction GetFaction(string name)
     {
         foreach(Faction faction in Factions)
         {

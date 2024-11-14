@@ -57,7 +57,18 @@ public partial class MeshSelection : Node3D
         GeneralSkeleton.MoveChild(joints, 0);
         GeneralSkeleton.MoveChild(surface, 1);
     }
+    
+    public Vector3 GetHeadPosition()
+    {
+        Skeleton3D skeleton = GetNode<Skeleton3D>("%GeneralSkeleton");
 
+        int bone = skeleton.FindBone("Head");
+        Transform3D boneTransformLocal = skeleton.GetBoneGlobalPose(bone);
+        Vector3 pos = skeleton.ToGlobal(boneTransformLocal.Origin);
+
+        return pos;
+    }
+     
     [Signal] public delegate void WeaponPlacedEventHandler();
     [Signal] public delegate void WeaponHeldEventHandler();
     [Signal] public delegate void WeaponHolsteredEventHandler();

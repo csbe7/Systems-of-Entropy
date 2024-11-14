@@ -31,10 +31,6 @@ public partial class NPC_pathfinding : NavigationAgent3D
     MoveState state = MoveState.still;
      
     [ExportCategory("Steering")]
-    [Export] public int maxRays;
-    [Export] Vector3 rayOffset;
-    [Export] float rayLenght = 3;
-
     public RayCast3D raycastNode;
     public ShapeCast3D shapecastNode;
 
@@ -64,7 +60,6 @@ public partial class NPC_pathfinding : NavigationAgent3D
         for(int i = 0; i < directionResolution; i++)
         {
            Vector3 vec = Vector3.Right.Rotated(Vector3.Up, (2*Mathf.Pi*i)/(directionResolution));
-           //GD.Print(vec);
            directions[i] = vec;
            interest[i] = 0;
         } 
@@ -117,12 +112,14 @@ public partial class NPC_pathfinding : NavigationAgent3D
         if (cc.sheet.GlobalPosition.DistanceTo(TargetPosition) > TargetDesiredDistance)
         {
             Vector3 point = NavigationServer3D.MapGetClosestPoint(GetNavigationMap(), cc.sheet.GlobalPosition);
-            if (!Mathf.IsZeroApprox(point.DistanceTo(cc.sheet.GlobalPosition)))
+            /*if (!Mathf.IsZeroApprox(point.DistanceTo(cc.sheet.GlobalPosition)))
             {
                 Vector3 direction = Game.flattenVector(point - cc.sheet.GlobalPosition).Normalized();
                 Move(direction);
-            }
+            }*/
+            
             Vector3 nextPos = GetNextPathPosition();
+            Game.DebugSphere(nextPos, cc.sheet);
             Vector3 dir = Game.flattenVector(nextPos - cc.sheet.GlobalPosition).Normalized();
             Move(dir);
         }
@@ -165,20 +162,27 @@ public partial class NPC_pathfinding : NavigationAgent3D
 
      
 
-
     void Move(Vector3 dir)
     {
-        ClearWeights();
-        CalculateCollisionAvoidance(steerType.obstacleAvoidanceDistance);
-        CalculateFollow(dir, steerType.followWeight);
-        CalculateNeighbourAvoidance(neighbours, 3, steerType.neighbourAvoidanceWeight);
-        CalculateFlee(steerType.fleeWeight);
-        CalculateStrafe(dir, steerType.strafeWeight);
-        //CalculateLineOfSight(steerType.lineOfSightDistance, targetNode.GlobalPosition, steerType.lineOfSightWeight);
+        if (IsInstanceValid(steerType))
+        {
+            ClearWeights();
+            CalculateCollisionAvoidance(steerType.obstacleAvoidanceDistance);
+            CalculateFollow(dir, steerType.followWeight);
+            CalculateNeighbourAvoidance(neighbours, 3, steerType.neighbourAvoidanceWeight);
+            CalculateFlee(steerType.fleeWeight);
+            CalculateStrafe(dir, steerType.strafeWeight);
+            //CalculateLineOfSight(steerType.lineOfSightDistance, targetNode.GlobalPosition, steerType.lineOfSightWeight);
 
-        if (cc.sheet.Velocity != Vector3.Zero) CalculateFollow(cc.sheet.Velocity.Normalized(), 0.1f);
+            if (cc.sheet.Velocity != Vector3.Zero) CalculateFollow(cc.sheet.Velocity.Normalized(), 0.1f);
         
-        cc.moveDir = cc.moveDir.Lerp(CalculateBestDir(), 0.5f);
+            cc.moveDir = cc.moveDir.Lerp(CalculateBestDir(), 0.5f);
+        }
+        else
+        {
+            cc.moveDir = dir;
+        }
+        
     }
 
 
@@ -211,7 +215,7 @@ public partial class NPC_pathfinding : NavigationAgent3D
     {
         if (weight == 0 || toFlee.Count == 0) return;
         Vector3 fleeDir = Vector3.Zero;
-        foreach(var danger in toFlee.Keys)
+        foreach(Node3D danger in toFlee.Keys)
         {
             Vector3 displacement = danger.GlobalPosition - cc.sheet.GlobalPosition;
             float distance = displacement.Length();
@@ -243,6 +247,7 @@ public partial class NPC_pathfinding : NavigationAgent3D
 
         foreach (var neighbour in neighbours)
         {
+            if (!cc.sheet.HasLineOfSight(neighbour.GlobalPosition)) continue;
             Vector3 displacement = neighbour.GlobalPosition - cc.sheet.GlobalPosition;
             float distance = displacement.Length();
 
@@ -326,7 +331,6 @@ public partial class NPC_pathfinding : NavigationAgent3D
 
     public bool HasLineOfSight(Vector3 from, Node3D to, bool hitBackFaces = false, bool hitFromInside = false)
     {
-        //GD.Print(raycastNode);
         raycastNode.GlobalPosition = from;
         raycastNode.TargetPosition = (to.GlobalPosition - from);
         bool prev = raycastNode.HitBackFaces;

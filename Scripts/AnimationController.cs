@@ -68,7 +68,6 @@ public partial class AnimationController : Node
     {
         if (on) leftArmIK.Start();
         else leftArmIK.Stop();
-        //GD.Print(on);
     }
 
     public void OnChangeState()
@@ -123,6 +122,13 @@ public partial class AnimationController : Node
         if (!cc.isSprinting) at.Set("parameters/MoveState/movementTimescale/scale", Mathf.Clamp(cc.sheet.GetStatValue("Speed")/cc.sheet.speed, 0.5f, 1.5f));
         else at.Set("parameters/MoveState/movementTimescale/scale", Mathf.Clamp(cc.sheet.GetStatValue("Speed")/(cc.sheet.speed * (1 + cc.sheet.sprintSpeedModifier.value/100)), 0.5f, 1.5f));
         
+        AnimationNodeBlendTree MoveState = (AnimationNodeBlendTree)(((AnimationNodeStateMachine)at.TreeRoot).GetNode("MoveState"));
+        ((AnimationNodeTransition)MoveState.GetNode("hasWeapon")).XfadeTime = cc.wm.currWeapon.drawTime;
+        
+        var anim = (AnimationNodeAnimation)MoveState.GetNode("draw_anim");
+        var speed = anim.TimelineLength / cc.wm.currWeapon.drawTime; 
+        at.Set("parameters/MoveState/draw_speed/scale", speed);
+
         float Delta = (float)delta * animationTimescale * cc.sheet.localTimescale * cc.game.Timescale; 
 
         if (IsInstanceValid(tween)) tween.CustomStep(Delta);
@@ -309,7 +315,6 @@ public partial class AnimationController : Node
     float reactionCurveSample;
     public void HitReaction(float delta)
     {
-        
         headIK.Stop();
         
         int bone = skeleton.FindBone(headIK.TipBone);
@@ -353,6 +358,7 @@ public partial class AnimationController : Node
         cc.wm.OnAttackEnded();
     }
 
+
     public void DrawWeapon()
     {
         AnimationNodeBlendTree MoveState = (AnimationNodeBlendTree)(((AnimationNodeStateMachine)at.TreeRoot).GetNode("MoveState"));
@@ -390,4 +396,5 @@ public partial class AnimationController : Node
         }
 
     }
+
 }

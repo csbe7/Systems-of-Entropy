@@ -20,6 +20,7 @@ size = Vector2(1, 1)
 collision_layer = 17
 script = ExtResource("1_tpa0x")
 size = Vector2(1, 1)
+metadata/SurfaceName = "Dirt"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_0wvpm")

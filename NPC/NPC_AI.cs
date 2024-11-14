@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 
 
-public partial class NPC_AI : Node
+public partial class NPC_AI : AI
 {   
     Game game;
     
@@ -12,13 +12,23 @@ public partial class NPC_AI : Node
     public enum State
     {
         idle,
+        investigate,
         combat,
     }
     public State state = State.idle;
+    //[Signal] public delegate void StateChangedEventHandler();
 
-    [Signal] public delegate void StateChangedEventHandler();
+    public enum CombatState{
+        non_combat,
+        chase,
+        strafe,
+        attack,
+        hide,
+        flee,
+    }
+    public CombatState combatState = CombatState.non_combat;
+    [Signal] public delegate void CombatStateChangedEventHandler();
 
-    [Export] public CharacterSheet sheet;
     [Export] public CharacterController cc;
     [Export] public Inventory inventory;
     [Export] public WeaponManager wm;
@@ -59,21 +69,14 @@ public partial class NPC_AI : Node
     public EnvironmentQuery.EnvironmentPoint targetPoint;    
 
     RandomNumberGenerator randomizer;
-    
+    [ExportCategory("Other")]
+    [Export] float noiseTreshold = 10;
     [Export] float tickrate;
     ScaledTimer tick = new ScaledTimer(true);
 
+
  
-    public enum CombatState{
-        non_combat,
-        chase,
-        strafe,
-        attack,
-        hide,
-        flee,
-    }
-    public CombatState combatState = CombatState.chase;
-    [Signal] public delegate void CombatStateChangedEventHandler();
+    
 
     public override async void _Ready()
     {
@@ -102,11 +105,15 @@ public partial class NPC_AI : Node
             OnEntityEntered(body);
         }
         
+        pf.steerType = chaseState;
         
         sheet.Attacked += OnAttacked;
+        cm.CombatantRemoved += OnCombatantRemoved;
         
         sheet.AddTimer(attackChargeTimer);
         attackChargeTimer.Timeout += StartAttack;
+        
+        SoundHeard += OnSoundHeard;
 
         tick.Timeout += OnTick;
         AddChild(tick);
@@ -121,6 +128,11 @@ public partial class NPC_AI : Node
         switch(state)
         {
             case State.idle:
+            Idle();
+            break;
+            
+            case State.investigate:
+            Investigate();
             break;
 
             case State.combat:
@@ -128,15 +140,23 @@ public partial class NPC_AI : Node
             break;
         }
     }
-
-
+     
     public void OnTick()
     {
+        Godot.Collections.Array<int> toRemove = new Godot.Collections.Array<int>();
+        int i = 0;
         //CHECK IF HIDDEN ARE VISIBLE
         foreach(CharacterSheet eSheet in hidden)
         {
-            if (!CanSee(eSheet)) continue;
-
+            if (!sheet.CanSee(eSheet, cc.forwardDir))
+            {
+                if (eSheet.noise > noiseTreshold && eSheet.noisePriority > investigationPriority)
+                {
+                    StartInvestigate();
+                }
+                continue;
+            } 
+            toRemove.Add(i);
             float rel = sheet.faction.GetRelationship(eSheet.faction);
             if (sheet.faction == eSheet.faction) //ALLY
             {
@@ -165,10 +185,71 @@ public partial class NPC_AI : Node
                     neutrals.Add(eSheet);
                 }
             }
+            i++;
+        }
+        
+        int indexOffset = 0;
+        foreach(int index in toRemove)
+        {
+            hidden.RemoveAt(index-indexOffset);
+            indexOffset++;
         }
 
     }
+
+    void StartIdle()
+    {
+        if(state == State.idle) return;
+        state = State.idle;
+
+        pf.SetStateStill();
+        cc.EndHoldingWeapon();
+
+        cc.EmitSignal(CharacterController.SignalName.StateChanged);
+
+        tick.Timeout += IdleTick;
+        
+        EmitSignal(SignalName.StateChanged);
+        StateChanged += EndIdle;
+    }
+    void Idle()
+    {
+      
+    }
+    void IdleTick()
+    {
+
+    }
+    void EndIdle()
+    {
+        StateChanged -= EndIdle;
+    }
+
     
+    Vector3 investigationTarget;
+    int investigationPriority = 0;
+    void StartInvestigate()
+    {
+        if(state == State.investigate) return;
+        pf.steerType = null;
+        state = State.investigate;
+        EmitSignal(SignalName.StateChanged);
+        StateChanged += EndInvestigate;
+    }
+    void Investigate()
+    {
+        pf.SetStateTravel(investigationTarget);
+        if (sheet.GlobalPosition.DistanceTo(investigationTarget) <= 1f && sheet.HasLineOfSight(investigationTarget))
+        {
+            EndInvestigate();
+        }
+    }
+    void EndInvestigate()
+    {
+        investigationPriority = 0;
+        StateChanged -= EndInvestigate;
+    }
+
     float danger = 0;
     bool canSee;
     float distance = 0;
@@ -178,6 +259,8 @@ public partial class NPC_AI : Node
         if (state == State.combat) return;
 
         state = State.combat;
+
+        SelectTarget();
 
         EquipWeapon();
         cc.StartHoldingWeapon();
@@ -191,6 +274,10 @@ public partial class NPC_AI : Node
         attackChargeTimer.countdown = ATTACK_CHARGE_IDLE_VALUE;
 
         pf.steerType = chaseState;
+
+        cm.AddCombatant(sheet);
+        cm.AddCombatant(target);
+
         EmitSignal(SignalName.StateChanged);
         StateChanged += EndCombat;
     }
@@ -199,9 +286,12 @@ public partial class NPC_AI : Node
         cc.EmitSignal(CharacterController.SignalName.StateChanged);
         //DECIDE STATE
         
+        if (!IsInstanceValid(target)) SelectTarget();
+        if (!IsInstanceValid(target)) return;
+
         canSee = CanSee(target);
         distance = sheet.GlobalPosition.DistanceTo(target.GlobalPosition);
-        canAttack = cc.canAttack && canSee && (CanShoot() || wm.currWeapon.weaponType != Weapon.WeaponType.ranged) && (distance <= wm.currWeapon.range) && (!wm.currWeapon.useCharge || wm.currWeaponSlotData.charge >= wm.currWeapon.chargePerAttack && attackCooldownTimer.countdown <= 0);
+        canAttack = cc.canAttack && canSee && /*(CanShoot() || wm.currWeapon.weaponType != Weapon.WeaponType.ranged) &&*/ (distance <= wm.currWeapon.range) && (!wm.currWeapon.useCharge || wm.currWeaponSlotData.charge >= wm.currWeapon.chargePerAttack && attackCooldownTimer.countdown <= 0);
         
 
         if (cc.isStunned) attackChargeTimer.countdown = -1;
@@ -265,34 +355,6 @@ public partial class NPC_AI : Node
     {
         danger = CalculateDanger();
         
-        //choose target
-        float maxPriority = 0;
-        CharacterSheet newTarget = target;
-        foreach(CharacterSheet enemy in enemies)
-        {
-            float priority = 100;
-            
-            if (!CanSee(enemy)) priority /= personality.sightWeight;
-            if (enemy == target) priority *= personality.targetFocus;
-
-            float d = sheet.GlobalPosition.DistanceSquaredTo(enemy.GlobalPosition);
-            float x = (wm.currWeapon.idealDistanceMIN + wm.currWeapon.idealDistanceMAX)/2;
-            float e = Mathf.Abs(d - Mathf.Pow(x, 2)) * personality.distanceWeight;
-            
-            float h = (enemy.GetStatValue("CurrentHealth")/enemy.GetStatValue("Health")) * 100 * personality.healthWeight;
-            
-
-            priority = priority/(1 + e) + h;
-            
-            
-            if (priority > maxPriority)
-            {
-                maxPriority = priority;
-                newTarget = enemy;
-            }
-        }
-
-        target = newTarget;
     }
     void EndCombat()
     {
@@ -319,25 +381,25 @@ public partial class NPC_AI : Node
     {
         if (targetPoint.valid) 
         {
-            float distance = targetPoint.point.DistanceTo(sheet.GlobalPosition);
+            pf.SetStateTravel(targetPoint.point);
+            float distance = pf.DistanceToTarget();//targetPoint.point.DistanceTo(sheet.GlobalPosition);
             if (distance - wm.currWeapon.idealDistanceMAX > 1.5f) cc.StartSprint();
             else if (distance <= pf.TargetDesiredDistance) cc.EndSprint();
 
-            pf.SetStateTravel(targetPoint.point);
             if (distance < pf.TargetDesiredDistance) NullTargetPoint();
         }
         else
         {
-            float distance = target.GlobalPosition.DistanceTo(sheet.GlobalPosition);
-            if (distance > wm.currWeapon.idealDistanceMAX * 1.5f) cc.StartSprint();
-            else if (distance <= wm.currWeapon.idealDistanceMAX) cc.EndSprint();
-
+            
             pf.SetStateTravel(target.GlobalPosition);
+            float distance = pf.DistanceToTarget();//target.GlobalPosition.DistanceTo(sheet.GlobalPosition);
+            if (distance > wm.currWeapon.idealDistanceMAX * 1.3f) cc.StartSprint();
+            else if (distance <= wm.currWeapon.idealDistanceMAX) cc.EndSprint();
         } 
     }
     void ChaseTick()
     {
-        if (!canSee) cm.RequestPathfinding(this, CombatManager.LoSRequest);
+        //if (!canSee) cm.RequestPathfinding(this, CombatManager.LoSRequest);
     }
     void EndChase()
     {
@@ -361,7 +423,14 @@ public partial class NPC_AI : Node
     }
     void Strafe()
     {
-        pf.SetStateTravel(target.GlobalPosition);
+        Vector3 dir = (target.GlobalPosition - sheet.GlobalPosition).Normalized();
+        Vector3 pos1 = sheet.GetCenterPosition() + (dir.Rotated(Vector3.Up, Mathf.Pi/2) * pf.steerType.obstacleAvoidanceDistance);
+        Vector3 pos2 = sheet.GetCenterPosition() - (dir.Rotated(Vector3.Up, Mathf.Pi/2) * pf.steerType.obstacleAvoidanceDistance);
+        if (Game.Raycast(sheet, sheet.GlobalPosition, pos1, Game.GetBitMask(Game.inanimate_layers)).Count > 0 && Game.Raycast(sheet, sheet.GlobalPosition, pos2, Game.GetBitMask(Game.inanimate_layers)).Count > 0)
+        { 
+            pf.SetStateStill();
+        }
+        else pf.SetStateTravel(target.GlobalPosition);
     }
     void EndStrafe()
     {
@@ -376,7 +445,7 @@ public partial class NPC_AI : Node
 
         pf.steerType = fleeState;
 
-        pf.toFlee[target] *= 2; //target could change
+        //if (pf.toFlee.ContainsKey(target)) pf.toFlee[target] *= 2; //target could change
 
         EmitSignal(SignalName.CombatStateChanged);
         CombatStateChanged += EndFlee;
@@ -387,7 +456,7 @@ public partial class NPC_AI : Node
     }
     void EndFlee()
     {
-        pf.toFlee[target] *= 2;
+        if (IsInstanceValid(target) && pf.toFlee.ContainsKey(target)) pf.toFlee[target] *= 2;
         CombatStateChanged -= EndFlee;
     }
 
@@ -449,7 +518,6 @@ public partial class NPC_AI : Node
         if (targetPoint.valid && sheet.GlobalPosition.DistanceTo(targetPoint.point) > pf.TargetDesiredDistance)
         {
             pf.SetStateTravel(targetPoint.point);
-            GD.Print(targetPoint.point);
         }
         else
         {
@@ -510,7 +578,7 @@ public partial class NPC_AI : Node
 
     void OnAttacked(AttackInfo attack)
     {
-        if (sheet.GetStatValue("CurrentHealth") <= 0) sheet.QueueFree();
+        if (sheet.GetStatValue("CurrentHealth") <= 0) Die();
         
         if (state != State.combat && attack.attacker.faction != sheet.faction)
         {
@@ -523,7 +591,7 @@ public partial class NPC_AI : Node
     {
         if (entity is not CharacterSheet eSheet || entity == sheet) return;
 
-        if (!CanSee(entity))
+        if (!sheet.CanSee(eSheet, cc.forwardDir) && eSheet.faction != sheet.faction)
         {
             hidden.Add(eSheet);
             return;
@@ -558,10 +626,37 @@ public partial class NPC_AI : Node
             }
         }
     }
-
-    public bool CanSee(Node3D entity)
+    
+    void OnSoundHeard(Sound sound, Vector3 source)
     {
-        return pf.HasLineOfSight(sheet.GetCenterPosition(wm), entity, true, true);
+        if (sound.emitter == sheet) return;
+        if (sound.emitter.faction.GetRelationship(sheet.faction) >= 0) return;
+
+        if (sound.priority >= investigationPriority) 
+        {
+            var r = Game.Raycast(sheet, cc.ac.humanoidMesh.GetHeadPosition(), source, Game.GetBitMask(Game.inanimate_layers));
+
+            if (r.Count > 0)
+            {
+                SurfaceData sdata = SurfaceManager.GetSurfaceData((string)((Node3D)r["collider"]).GetMeta("SurfaceName"));
+                if (sdata != null)
+                {
+                    float soundIntensity = sound.maxHearingDistance / sdata.soundDampening;
+                    if (sheet.GlobalPosition.DistanceTo(source) > soundIntensity) return;
+                }
+            }
+ 
+            investigationTarget = source;
+            investigationPriority = sound.priority;
+            if (state != State.combat) StartInvestigate();
+        }
+    }
+
+    public bool CanSee(CharacterSheet entity)
+    {
+        if (!IsInstanceValid(entity)) return false;
+        return sheet.HasLineOfSight(entity.GetCenterPosition());
+        //return pf.HasLineOfSight(sheet.GetCenterPosition(wm), entity, true, true);
     }
     
     Shape3D bulletShape;
@@ -584,37 +679,38 @@ public partial class NPC_AI : Node
 
     void SelectTarget()
     {
-        Godot.Collections.Dictionary<CharacterSheet, float> attackers = new Godot.Collections.Dictionary<CharacterSheet, float>();
-        CharacterSheet highestPriority = null;
-        
-        foreach(AttackInfo att in recentAttacks)
-        {
-            if (!attackers.ContainsKey(att.attacker))
-            {
-                attackers.Add(att.attacker, att.damage);
-                continue;
-            }
-
-            attackers[att.attacker] += att.damage;
-        }
-        
+        //choose target
         float maxPriority = 0;
-
+        CharacterSheet newTarget = target;
         foreach(CharacterSheet enemy in enemies)
         {
-            float priority = 10;
-            if (attackers.ContainsKey(enemy)) priority = attackers[enemy];
-            if (CanSee(enemy)) priority *= 2;
-            priority /= sheet.GlobalPosition.DistanceTo(enemy.GlobalPosition);
+            float priority = 100;
+            
+            if (!CanSee(enemy)) priority /= personality.sightWeight;
+            if (IsInstanceValid(target) && enemy == target) priority *= personality.targetFocus;
 
-            if (priority > maxPriority) 
+            float d = sheet.GlobalPosition.DistanceSquaredTo(enemy.GlobalPosition);
+            float x = (wm.currWeapon.idealDistanceMIN + wm.currWeapon.idealDistanceMAX)/2;
+            float e = Mathf.Abs(d - Mathf.Pow(x, 2)) * personality.distanceWeight;
+            
+            float h = (enemy.GetStatValue("CurrentHealth")/enemy.GetStatValue("Health")) * 100 * personality.healthWeight;
+            
+
+            priority = priority/(1 + e) + h;
+            
+            
+            if (priority > maxPriority)
             {
                 maxPriority = priority;
-                highestPriority = enemy;
+                newTarget = enemy;
             }
         }
 
-        if (IsInstanceValid(highestPriority)) target = highestPriority;
+        if (IsInstanceValid(newTarget)) target = newTarget;
+        else
+        {
+            StartIdle();
+        }
     }
     
     float CalculateDanger()
@@ -686,12 +782,11 @@ public partial class NPC_AI : Node
                 {
                     if (Game.Intercept(target.GlobalPosition, cc.sheet.GlobalPosition, target.Velocity, wm.currWeapon.projectileSpeed, out Vector3 dir, out Vector3 pos) == 1)
                     {
-                        var ray = Game.Shapecast(sheet, bulletShape, sheet.GlobalPosition, Game.GetBitMask(pf.static_layers));
+                        var ray = Game.Raycast(sheet, sheet.GetCenterPosition(wm), pos, Game.GetBitMask(pf.static_layers));
                         if (ray.Count != 0 /*&& (Node3D)ray[0]["collider"] != target && (Node3D)ray[0]["collider"] != sheet*/ || !dir.IsFinite()) //FIX THIS!!!!!
                         {
                             cc.forwardDir = Game.flattenVector((target.GlobalPosition - cc.sheet.GlobalPosition)).Normalized();
                             return;
-                            //GD.Print("Intercept not viable");
                         } 
                         cc.forwardDir = Game.flattenVector(dir).Normalized();
                         return;
@@ -707,10 +802,29 @@ public partial class NPC_AI : Node
            if (cc.moveDir != Vector3.Zero) cc.forwardDir = cc.moveDir.Normalized();
         }
     }
-    
+
+    void OnCombatantRemoved(CharacterSheet dead)
+    {
+        if (enemies.Contains(dead)) enemies.Remove(dead);
+        else if (allies.Contains(dead)) allies.Remove(dead);
+        else if (neutrals.Contains(dead)) neutrals.Remove(dead);
+        else if (hidden.Contains(dead)) hidden.Remove(dead);
+        
+        if (pf.toFlee.ContainsKey(dead)) pf.toFlee.Remove(dead);
+    }
+
+    void Die()
+    {
+        cm.RemoveCombatant(sheet);
+        sheet.QueueFree();
+        SetProcess(false);
+        SetPhysicsProcess(false);
+    }
+
     public void NullTargetPoint()
     {
         targetPoint = new EnvironmentQuery.EnvironmentPoint(Vector3.Zero);
         targetPoint.valid = false;
     }
+
 }
