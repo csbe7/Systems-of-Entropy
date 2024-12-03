@@ -76,8 +76,6 @@ public partial class NPC_AI : AI
 
 
  
-    
-
     public override async void _Ready()
     {
         cm = GetTree().Root.GetNode<CombatManager>("CombatManager");
@@ -112,6 +110,8 @@ public partial class NPC_AI : AI
         
         sheet.AddTimer(attackChargeTimer);
         attackChargeTimer.Timeout += StartAttack;
+
+        sheet.AddTimer(hearDelay);
         
         SoundHeard += OnSoundHeard;
 
@@ -201,7 +201,7 @@ public partial class NPC_AI : AI
     {
         if(state == State.idle) return;
         state = State.idle;
-
+        
         pf.SetStateStill();
         cc.EndHoldingWeapon();
 
@@ -228,25 +228,61 @@ public partial class NPC_AI : AI
     
     Vector3 investigationTarget;
     int investigationPriority = 0;
+    CharacterSheet soundSource;
+    Sound soundHeard;
+    Vector3 ogpos;
+    ScaledTimer investigationTimer;
+    ScaledTimer waitTimer;
     void StartInvestigate()
     {
-        if(state == State.investigate) return;
+        if(state == State.investigate || state == State.combat) return;
         pf.steerType = null;
+        ogpos = sheet.GlobalPosition;
         state = State.investigate;
+        if (soundHeard.AI_followSource)
+        {
+            investigationTimer = new ScaledTimer(false, false);
+            sheet.AddTimer(investigationTimer);
+            //investigationTimer.Timeout += investigationTimer.QueueFree;
+            investigationTimer.Start(personality.maxInvestigationTime);
+        }
         EmitSignal(SignalName.StateChanged);
         StateChanged += EndInvestigate;
     }
     void Investigate()
     {
-        pf.SetStateTravel(investigationTarget);
-        if (sheet.GlobalPosition.DistanceTo(investigationTarget) <= 1f && sheet.HasLineOfSight(investigationTarget))
+        if (IsInstanceValid(waitTimer) && waitTimer.countdown > 0) pf.SetStateStill();
+        else if (!IsInstanceValid(soundSource) || !soundHeard.AI_followSource || (IsInstanceValid(investigationTimer) && investigationTimer.countdown <= 0))
         {
-            EndInvestigate();
+            pf.SetStateTravel(investigationTarget);
+        } 
+        else
+        {  
+            if (investigationTarget != ogpos) investigationTarget = soundSource.GlobalPosition;
+            pf.SetStateTravel(investigationTarget); 
         }
+
+        if (sheet.GlobalPosition.DistanceTo(investigationTarget) <= 1f && sheet.HasLineOfSight(investigationTarget) || (IsInstanceValid(investigationTimer) && investigationTimer.countdown <= 0))
+        {
+            if (!IsInstanceValid(waitTimer))
+            {
+                waitTimer = new();
+                sheet.AddTimer(waitTimer);
+                waitTimer.Start(2);
+            }
+            else if (waitTimer.countdown <= 0)
+            {
+                investigationTarget = ogpos;
+                if (sheet.GlobalPosition.DistanceTo(ogpos) <= 1f) StartIdle();
+            }
+
+        }        
     }
     void EndInvestigate()
     {
         investigationPriority = 0;
+        if (IsInstanceValid(investigationTimer)) investigationTimer.QueueFree();
+        if (IsInstanceValid(waitTimer)) waitTimer.QueueFree();
         StateChanged -= EndInvestigate;
     }
 
@@ -627,6 +663,7 @@ public partial class NPC_AI : AI
         }
     }
     
+    ScaledTimer hearDelay = new ScaledTimer();
     void OnSoundHeard(Sound sound, Vector3 source)
     {
         if (sound.emitter == sheet) return;
@@ -648,7 +685,13 @@ public partial class NPC_AI : AI
  
             investigationTarget = source;
             investigationPriority = sound.priority;
-            if (state != State.combat) StartInvestigate();
+            soundSource = sound.emitter;
+            soundHeard = sound;
+            if (state != State.combat)
+            {
+                hearDelay.Start(0.3f);
+                hearDelay.Timeout += StartInvestigate;
+            } 
         }
     }
 

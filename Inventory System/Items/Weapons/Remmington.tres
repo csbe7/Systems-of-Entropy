@@ -66,6 +66,7 @@ stream = ExtResource("8_38dlm")
 volumeDb = 0.0
 maxHearingDistance = 20.0
 priority = 10
+AI_followSource = false
 
 [sub_resource type="Resource" id="Resource_ykmjp"]
 script = ExtResource("7_56w45")

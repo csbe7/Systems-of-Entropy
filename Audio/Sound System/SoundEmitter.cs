@@ -16,6 +16,7 @@ public partial class SoundEmitter : AudioStreamPlayer3D
         VolumeDb = sounds[index].volumeDb;
         base.Play();
     }
+    
     public void Play(Sound sound, float pitchScale = 1, bool duplicate = true)
     {
         float oldPitch = PitchScale;

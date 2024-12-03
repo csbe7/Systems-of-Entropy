@@ -40,6 +40,7 @@ stream = ExtResource("10_41bqr")
 volumeDb = 10.0
 maxHearingDistance = 10.0
 priority = 1
+AI_followSource = false
 
 [sub_resource type="Resource" id="Resource_2nkft"]
 script = ExtResource("9_cajkj")
@@ -449,8 +450,14 @@ script = ExtResource("19_q27bk")
 
 [node name="HumanoidMesh" parent="Mesh" instance=ExtResource("20_l4gt8")]
 
+[node name="weaponAttachment" parent="Mesh/HumanoidMesh/GeneralSkeleton" index="2"]
+transform = Transform3D(-2.98024e-08, -1, 1.19209e-07, 4.56349e-08, -1.19209e-07, -1, 1, -2.98024e-08, 4.56349e-08, -0.713332, 1.39782, -0.0561226)
+
 [node name="WeaponStreamPlayer" parent="Mesh/HumanoidMesh/GeneralSkeleton/weaponAttachment" index="1" node_paths=PackedStringArray("owner")]
 owner = NodePath("../../../../..")
+
+[node name="backAttachment" parent="Mesh/HumanoidMesh/GeneralSkeleton" index="6"]
+transform = Transform3D(1, -1.73472e-18, -8.07793e-28, 1.73472e-18, 1, 9.31322e-10, -8.07793e-28, -9.31322e-10, 1, 1.02018e-08, 1.20071, 0.00151351)
 
 [node name="AnimationTree" parent="Mesh/HumanoidMesh" index="5"]
 tree_root = SubResource("AnimationNodeStateMachine_ayxmi")

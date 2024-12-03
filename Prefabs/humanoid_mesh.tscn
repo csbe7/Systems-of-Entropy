@@ -905,7 +905,7 @@ bones/64/scale = Vector3(1, 1, 1)
 
 [node name="weaponAttachment" type="BoneAttachment3D" parent="GeneralSkeleton"]
 unique_name_in_owner = true
-transform = Transform3D(-2.98023e-08, -1, 1.19209e-07, -1.33179e-07, -1.19209e-07, -1, 1, -2.98023e-08, -1.33179e-07, -0.713332, 1.39782, -0.0561227)
+transform = Transform3D(-2.98024e-08, -1, 1.19209e-07, 4.56349e-08, -1.19209e-07, -1, 1, -2.98024e-08, 4.56349e-08, -0.713332, 1.39782, -0.0561226)
 bone_name = "RightHand"
 bone_idx = 10
 
@@ -944,7 +944,7 @@ target_node = NodePath("../../head_target")
 
 [node name="backAttachment" type="BoneAttachment3D" parent="GeneralSkeleton"]
 unique_name_in_owner = true
-transform = Transform3D(1, -1.73472e-18, -8.07794e-28, 1.73472e-18, 1, 9.31323e-10, -8.07794e-28, -9.31323e-10, 1, 1.02017e-08, 1.20071, 0.00151349)
+transform = Transform3D(1, -1.73472e-18, -8.07793e-28, 1.73472e-18, 1, 9.31322e-10, -8.07793e-28, -9.31322e-10, 1, 1.02018e-08, 1.20071, 0.00151351)
 bone_name = "Chest"
 bone_idx = 2
 

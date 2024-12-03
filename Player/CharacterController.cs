@@ -159,7 +159,8 @@ public partial class CharacterController : Node
                     {
                         s.maxHearingDistance /= crouchSoundReduction;
                         s.volumeDb -= 10;
-                    } 
+                    }
+                    s.emitter = sheet;
                     se.Play(s, randomizer.RandfRange(sdata.pitchScale - 0.2f, sdata.pitchScale + 0.2f), false);
                     stepTimer.Start(stepTime);
                 }

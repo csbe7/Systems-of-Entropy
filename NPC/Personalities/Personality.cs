@@ -19,6 +19,7 @@ public partial class Personality : Resource
     [Export] public float maxHideTime = 60;
     [Export] public float hideCooldown;
     [Export] public float reloadTreshold;
+    [Export] public float maxInvestigationTime = 5;
 
     [ExportCategory("Target Selection")]
     [Export] public float targetFocus = 2;

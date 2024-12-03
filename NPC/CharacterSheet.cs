@@ -14,7 +14,6 @@ public partial class CharacterSheet : CharacterBody3D
     
     [ExportCategory("Character Status")]
     public Game game;
-    CharacterSheet sheet;
     public float localTimescale = 1;
     [Signal] public delegate void AttackedEventHandler(AttackInfo info);
     [Signal] public delegate void HealthChangedEventHandler(float change);
@@ -254,7 +253,7 @@ public partial class CharacterSheet : CharacterBody3D
     Node statusEffects;
     public void AddStatusEffect(StatusEffect statusEffect)
 	{
-		statusEffect.target = sheet;
+		statusEffect.target = this;
         statusEffects.AddChild(statusEffect);
         
 		Godot.Collections.Array<StatusEffect> statusEffectList = GetStatusEffects();

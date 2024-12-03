@@ -9,4 +9,9 @@ public partial class Sound : Resource
     [Export] public float  maxHearingDistance;
     [Export] public int priority;
     public CharacterSheet emitter;
+
+    [ExportCategory("AI")]
+    [Export] public bool AI_followSource = false;
+    
+
 }
